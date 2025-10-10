@@ -1,2 +1,2 @@
-server/.env
-server/index.html
+**/server/.env
+**/server/index.html
