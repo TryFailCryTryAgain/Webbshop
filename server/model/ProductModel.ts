@@ -20,4 +20,6 @@ const ProductSchema: Schema = new Schema<Products>({
     creation_at: { type: Date },
     update_at: { type: Date },
     rate: [{ type: String }]
-})
+});
+
+export const Product = mongoose.model<Products>('Products', ProductSchema, 'Product');

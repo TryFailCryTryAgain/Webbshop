@@ -11,6 +11,7 @@ export interface Users extends Document {
     last_name: string;
     role: string;
     tel: number;
+    updated_at: Date;
 }
 
 const UserSchema: Schema = new Schema<Users>({
@@ -22,7 +23,8 @@ const UserSchema: Schema = new Schema<Users>({
     password: { type: String, required: true },
     adress: { type: String },
     ZIP: { type: Number },
-    city: { type: String }
+    city: { type: String },
+    updated_at: { type: Date }
 });
 
 export const User = mongoose.model<Users>('Users', UserSchema, 'User');
