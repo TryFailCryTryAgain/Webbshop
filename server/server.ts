@@ -1,7 +1,10 @@
 import express from 'express';
 import cors from 'cors';
-import { connectToDatabase } from './utils/db.ts';
+import db from './utils/db';
 import mongoose from 'mongoose';
+import UserRouter from './routes/userRoutes';
+
+const { connectToDatabase } = db;
 
 const app = express();
 
@@ -13,6 +16,8 @@ app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
 
+
+// A route to check if the connection to the cluster is active
 app.get('/test', async (req, res) => {
     try {
         if (mongoose.connection.readyState === 1) {
@@ -32,3 +37,7 @@ app.get('/test', async (req, res) => {
 })
 
 connectToDatabase();
+
+
+
+app.use("/user", UserRouter);
