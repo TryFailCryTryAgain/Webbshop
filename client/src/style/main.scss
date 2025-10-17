@@ -1,0 +1,11 @@
+// resetfile
+@use './reset';
+
+// variables file
+@use './variables';
+
+// Components
+@use './components/header';
+@use './components/product_layout';
+@use './components/one_product';
+

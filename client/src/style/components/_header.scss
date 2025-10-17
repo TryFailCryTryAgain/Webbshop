@@ -1,0 +1,72 @@
+@import '../variables';
+
+.user-header {
+    height: 75px;
+    background-color: $bg;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    border-bottom: 1px solid $border;
+
+    .logo {
+        font-size: 2rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        background: linear-gradient(135deg, $primary, $secondary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        letter-spacing: -0.5px;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 20px;
+        list-style-type: none;
+        color: $text-muted;
+        font-size: 1rem;
+        padding: 0 12px;
+        transition: all 0.3s ease;
+
+        li:hover {
+            color: $text;
+            cursor: pointer;
+        }
+
+        li:active {
+            color: $primary;
+        }
+    }
+
+    .sign-in {
+        padding: 6px 12px;
+        background-color: $primary;
+        border: none;
+        border-radius: 7px;
+        color: $text;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .sign-in:hover {
+        cursor: pointer;
+        background-color: $secondary;
+        scale: 1.05;
+    }
+
+    .sign-in:active {
+        background-color: $primary;
+        scale: 1;
+    }
+
+    .search-bar {
+
+        input {
+            background-color: $bg-light;
+            border: 1px solid $border;
+            border-radius: 4px;
+            padding: 6px 12px;
+            color: $text;
+        }
+    }
+}
