@@ -1,0 +1,61 @@
+@import '../variables';
+
+.review-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 20px;
+
+    .review-title {
+        font-size: 1.5rem;
+        justify-content: flex-start;
+        margin-top: 1.5rem;
+    }
+
+    .review-card {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+
+        .user-info {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 20px;
+
+            .profile-img {
+                height: 40px;
+                width: 40px;
+                background: linear-gradient(135deg, $bg-dark, $bg-light);
+                border-radius: 50vw;
+            }
+
+            .profile-info {
+                display: flex;
+                flex-direction: column;
+
+                .rating {   
+                    font-size: 1.25rem;
+                    letter-spacing: 0.25rem;
+                    font-weight: 600;
+                    background: linear-gradient(135deg, $warning 60%, $text-muted 60%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    width: fit-content;
+                }
+
+                .username {
+                    font-size: 1.125rem;
+                    font-weight: 600;
+                    line-height: 0;
+                }
+            }
+        }
+
+        .description {
+            color: $text-muted;
+        }
+    }
+}
+

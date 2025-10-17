@@ -1,4 +1,11 @@
 import { Header } from "../components/header";
+import TestReview from "../components/test_reviews";
+
+const renderMultipleReviews = (count: number) => {
+    return Array.from({ length: count }, (_, index) => (
+        <TestReview key={index} />
+    ));
+}
 
 export const Product = () => {
     return (
@@ -22,7 +29,12 @@ export const Product = () => {
                     <h2 className="title">Product info</h2>
                     <div className="info">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Commodi fugit placeat facilis neque at, dolores cumque sapiente quasi, hic laboriosam sint repudiandae. Velit modi magnam facilis id harum laborum quod.</div>
                 </div>
+                <div className="review-container">
+                    <h2 className="review-title">Reviews</h2>
+                    {renderMultipleReviews(5)}
+                </div>
             </div>
+            
         </>
     );
 };
