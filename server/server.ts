@@ -3,6 +3,9 @@ import cors from 'cors';
 import db from './utils/db';
 import mongoose from 'mongoose';
 import UserRouter from './routes/userRoutes';
+import ProductRouter from './routes/productRoutes';
+import ReviewRouter from './routes/reviewRoutes';
+import OrderRouter from './routes/orderRoutes';
 
 const { connectToDatabase } = db;
 
@@ -15,7 +18,6 @@ const PORT = 8080;
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
-
 
 // A route to check if the connection to the cluster is active
 app.get('/test', async (req, res) => {
@@ -38,6 +40,7 @@ app.get('/test', async (req, res) => {
 
 connectToDatabase();
 
-
-
-app.use("/user", UserRouter);
+app.use('/user', UserRouter);
+app.use('/product', ProductRouter);
+app.use('/review', ReviewRouter);
+app.use('/order', OrderRouter);

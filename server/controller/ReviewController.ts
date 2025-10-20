@@ -6,7 +6,7 @@ const getReviews = async (req: Request, res: Response): Promise<void> => {
         const reviews = await Review.find();
         res.json(reviews);
     } catch (err) {
-        res.status(500).json({ message: "Error fetching revies", error: err });
+        res.status(500).json({ message: "Error fetching reviews", error: err });
     }
 }
 

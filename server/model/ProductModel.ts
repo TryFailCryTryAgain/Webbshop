@@ -6,8 +6,8 @@ export interface Products extends Document {
     description: string;
     price: number;
     images: string[];
-    creation_at: Date;
-    update_at: Date;
+    created_at: Date;
+    updated_at: Date;
     rate: string[];
 }
 
@@ -17,8 +17,8 @@ const ProductSchema: Schema = new Schema<Products>({
     description: { type: String },
     price: { type: Number },
     images: [{ type: String }],
-    creation_at: { type: Date },
-    update_at: { type: Date },
+    created_at: { type: Date },
+    updated_at: { type: Date },
     rate: [{ type: String }]
 });
 

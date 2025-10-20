@@ -21,7 +21,7 @@ UserRouter.get("/current", authenticateToken, getCurrentUser);
 UserRouter.put("/:_id", authenticateToken, updateUser);
 UserRouter.delete("/:_id", authenticateToken, deleteUser);
 UserRouter.get("/session", authenticateToken, getSessionInfo);
-UserRouter.post("logout", authenticateToken, logoutUser);
+UserRouter.post("/logout", authenticateToken, logoutUser);
 
 
 export default UserRouter;
