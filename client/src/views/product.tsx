@@ -21,8 +21,10 @@ export const Product = () => {
                     <div className="img"></div>
                     <div className="price-info">
                         <div className="price">15 $</div>
-                        <button className="add-to-cart">add</button>
-                        <button className="wishlist">Whistlist</button>
+                        <div className="action-buttons">
+                            <button className="add-to-cart">add</button>
+                            <button className="wishlist">Whistlist</button>
+                        </div>
                     </div>
                 </div>
                 <div className="product-info">

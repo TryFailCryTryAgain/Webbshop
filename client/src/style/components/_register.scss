@@ -1,0 +1,338 @@
+@import '../variables';
+
+.register-container {
+    background-color: $bg-dark;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    color: $text;
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 100vh;
+
+    .register-form {
+        background-color: $bg;
+        border: 1px solid $border;
+        border-radius: 8px;
+        padding: 1.5rem;
+        width: 100%;
+        max-width: 420px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+
+        &:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+            border-color: $border-muted;
+        }
+
+        .register-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: $text;
+            position: relative;
+
+            &::after {
+                content: "";
+                position: absolute;
+                bottom: -0.375rem;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 60px;
+                height: 2px;
+                background: linear-gradient(135deg, $primary, $secondary);
+                border-radius: 1px;
+            }
+        }
+
+        .form-row {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+
+            .form-group {
+                flex: 1;
+                margin-bottom: 0;
+            }
+
+            // Stack on smaller screens - changed from 480px to 1440px
+            @media (max-width: 1439px) {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1rem;
+
+            label {
+                font-size: 0.8rem;
+                font-weight: 500;
+                margin-bottom: 0.375rem;
+                color: $text-muted;
+                transition: all 0.3s ease;
+            }
+
+            input {
+                padding: 0.625rem 0.875rem;
+                border: 1px solid $border;
+                border-radius: 6px;
+                background-color: $bg-dark;
+                color: $text;
+                font-size: 0.9rem;
+                transition: all 0.3s ease;
+
+                &:focus {
+                    outline: none;
+                    border-color: $primary;
+                    box-shadow: 0 0 0 2px rgba($primary, 0.1);
+                }
+
+                &:hover {
+                    border-color: $border-muted;
+                }
+
+                &::placeholder {
+                    color: $text-muted;
+                    opacity: 0.7;
+                }
+            }
+
+            &:focus-within {
+                label {
+                    color: $primary;
+                }
+            }
+        }
+
+        button {
+            width: 100%;
+            padding: 0.75rem 1.25rem;
+            background: linear-gradient(135deg, $primary, $secondary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 0.75rem;
+
+            &:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba($primary, 0.3);
+            }
+
+            &:active {
+                transform: translateY(0);
+                box-shadow: 0 2px 6px rgba($primary, 0.3);
+            }
+
+            &:focus {
+                outline: none;
+                box-shadow: 0 0 0 2px rgba($primary, 0.3);
+            }
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid $border;
+
+            p {
+                color: $text-muted;
+                font-size: 0.8rem;
+                
+                a {
+                    color: $primary;
+                    text-decoration: none;
+                    transition: color 0.3s ease;
+
+                    &:hover {
+                        color: $secondary;
+                        text-decoration: underline;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Tablet styles
+@media (min-width: 768px) {
+    .register-container {
+        padding: 1.5rem;
+
+        .register-form {
+            padding: 1.75rem;
+            max-width: 440px;
+
+            .register-title {
+                font-size: 1.625rem;
+                margin-bottom: 1.75rem;
+            }
+
+            .form-group {
+                margin-bottom: 1.125rem;
+
+                label {
+                    font-size: 0.825rem;
+                }
+
+                input {
+                    padding: 0.6875rem 1rem;
+                    font-size: 0.925rem;
+                }
+            }
+
+            button {
+                padding: 0.8125rem 1.25rem;
+                font-size: 0.925rem;
+                margin-top: 1rem;
+            }
+        }
+    }
+}
+
+// Desktop styles - form-row stays side-by-side only at 1440px and above
+@media (min-width: 1024px) and (max-width: 1439px) {
+    .register-container {
+        .register-form {
+            max-width: 460px;
+            padding: 2rem;
+
+            .register-title {
+                font-size: 1.75rem;
+            }
+
+            // form-row stays column layout between 1024px and 1439px
+            .form-row {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    }
+}
+
+// Large desktop styles - form-row goes side-by-side only at 1440px+
+@media (min-width: 1440px) {
+    .register-container {
+        padding: 2rem;
+
+        .register-form {
+            max-width: 480px;
+            padding: 2rem;
+
+            .register-title {
+                font-size: 1.75rem;
+            }
+
+            // form-row becomes side-by-side only at 1440px and above
+            .form-row {
+                flex-direction: row;
+                gap: 0.75rem;
+            }
+        }
+    }
+}
+
+// Extra small devices
+@media (max-width: 375px) {
+    .register-container {
+        padding: 0.5rem;
+
+        .register-form {
+            padding: 1.25rem;
+
+            .register-title {
+                font-size: 1.375rem;
+                margin-bottom: 1.25rem;
+            }
+
+            .form-group {
+                margin-bottom: 0.875rem;
+
+                input {
+                    padding: 0.5625rem 0.75rem;
+                    font-size: 0.85rem;
+                }
+            }
+
+            button {
+                padding: 0.6875rem 1rem;
+                font-size: 0.85rem;
+                margin-top: 0.75rem;
+            }
+        }
+    }
+}
+
+// Animation for form appearance
+@keyframes formSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.register-form {
+    animation: formSlideIn 0.4s ease-out;
+}
+
+// Compact password strength indicator
+.password-strength {
+    margin-top: 0.375rem;
+    height: 3px;
+    border-radius: 1.5px;
+    background-color: $border;
+    overflow: hidden;
+
+    .strength-bar {
+        height: 100%;
+        transition: all 0.3s ease;
+        
+        &.weak {
+            background-color: $danger;
+            width: 33%;
+        }
+        
+        &.medium {
+            background-color: $warning;
+            width: 66%;
+        }
+        
+        &.strong {
+            background-color: $success;
+            width: 100%;
+        }
+    }
+}
+
+// Form validation styles
+.form-error {
+    border-color: $danger !important;
+    
+    &:focus {
+        box-shadow: 0 0 0 2px rgba($danger, 0.1) !important;
+    }
+}
+
+.error-message {
+    color: $danger;
+    font-size: 0.7rem;
+    margin-top: 0.2rem;
+    display: block;
+}
