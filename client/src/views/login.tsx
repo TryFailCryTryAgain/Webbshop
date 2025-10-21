@@ -1,4 +1,3 @@
-import { Header } from "../components/header";
 
 const LoginPage = () => {
     return (
