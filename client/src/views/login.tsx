@@ -21,6 +21,9 @@ const LoginPage = () => {
 
                     <button type="submit">Log in</button>
 
+                    <div className="form-footer">
+                        <p>Don't have an account? <a href="/register">Register here</a></p>
+                    </div>
                 </form>
 
             </main>
