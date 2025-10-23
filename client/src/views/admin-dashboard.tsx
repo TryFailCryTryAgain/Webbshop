@@ -44,13 +44,14 @@ const AdminDashboard = () => {
             <Header />
 
             <main className="dashboard-container">
-                
+
                 <AdminDashboardTabs 
                     tabs={tabs}
                     activeTab={activeTab}
                     onTabChange={setActiveTab}
                 />
                 <div className="tab-content">
+                    <div className="tab-content-title">{activeTab}</div>
                     {renderTabContent()}
                 </div>
 
