@@ -1214,4 +1214,31 @@
 .data-table-container .action-buttons .btn-info {
   background-color: #60A5FA;
   color: #0D0D0D;
+}
+.data-table-container .pagination {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+.data-table-container .pagination button {
+  padding: 8px 12px;
+  background-color: #262626;
+  border: 1px solid #4D4D4D;
+  color: #F2F2F2;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+.data-table-container .pagination button:hover {
+  background-color: #14B8A6;
+  color: #0D0D0D;
+}
+.data-table-container .pagination button:active {
+  background-color: #EC4899;
+  color: #0D0D0D;
+}
+.data-table-container .pagination .active {
+  background-color: #14B8A6;
+  color: #0D0D0D;
 }/*# sourceMappingURL=main.css.map */

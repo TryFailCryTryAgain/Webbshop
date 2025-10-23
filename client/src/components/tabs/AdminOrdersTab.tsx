@@ -1,9 +1,10 @@
+import { AdminOrderTable } from "../tables/AdminOrderTable";
 
 
 const AdminOrdersTab = () => {
     return (
         <>
-            <div style={{ color: '#FAFAFA'}}>Orders</div>
+            <AdminOrderTable />
         </>
     );
 };
