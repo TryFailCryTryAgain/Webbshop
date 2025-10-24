@@ -6,6 +6,7 @@ import UserRouter from './routes/userRoutes';
 import ProductRouter from './routes/productRoutes';
 import ReviewRouter from './routes/reviewRoutes';
 import OrderRouter from './routes/orderRoutes';
+import CategoryRouter from './routes/categoryRoutes';
 
 const { connectToDatabase } = db;
 
@@ -44,3 +45,4 @@ app.use('/user', UserRouter);
 app.use('/product', ProductRouter);
 app.use('/review', ReviewRouter);
 app.use('/order', OrderRouter);
+app.use('/category', CategoryRouter);

@@ -1,14 +1,15 @@
-import express from "express";
-import ProductController from "../controller/ProductController";
+// productRoutes.ts
+import express from 'express';
+import ProductController from '../controller/ProductController';
 
 const ProductRouter = express.Router();
 
-const { getProducts, getProductById, createProduct, updateProduct, deleteProduct } = ProductController;
-
-ProductRouter.get('/', getProducts );
-ProductRouter.get('/:_id', getProductById );
-ProductRouter.post('/', createProduct);
-ProductRouter.put('/:_id', updateProduct);
-ProductRouter.delete('/:_id', deleteProduct);
+ProductRouter.get('/', ProductController.getProducts);
+ProductRouter.get('/:_id', ProductController.getProductById);
+ProductRouter.get('/category/:categoryId', ProductController.getProductsByCategory);
+ProductRouter.get('/category/slug/:slug', ProductController.getProductsByCategorySlug);
+ProductRouter.post('/', ProductController.createProduct);
+ProductRouter.put('/:_id', ProductController.updateProduct);
+ProductRouter.delete('/:_id', ProductController.deleteProduct);
 
 export default ProductRouter;
