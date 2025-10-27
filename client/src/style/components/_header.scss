@@ -106,7 +106,7 @@
 
     // Optional: Different color for sign-up button
     .sign-up {
-        background-color: lighten($primary, 10%);
+        background-color: $primary;
         
         &:hover {
             background-color: $secondary;
@@ -115,7 +115,7 @@
 
     // Optional: Different color for logout button
     .logout-btn {
-        background-color: darken($primary, 10%);
+        background-color: $primary;
         
         &:hover {
             background-color: $secondary;

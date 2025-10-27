@@ -45,24 +45,28 @@
         }
 
         .img {
+            overflow: hidden;
             width: 100%;
             height: 200px;
             background-color: $bg-light;
-            background-image: linear-gradient(45deg, $border-muted 25%, transparent 25%), 
-                                linear-gradient(-45deg, $border-muted 25%, transparent 25%), 
-                                linear-gradient(45deg, transparent 75%, $border-muted 75%), 
-                                linear-gradient(-45deg, transparent 75%, $border-muted 75%);
-            background-size: 20px 20px;
-            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
-        
-            &::after {
-                content: "Image";
+
+            .product-image {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                position: relative;
+                z-index: 2;
+            }
+
+            .no-image {
                 color: $text-muted;
                 font-size: 0.875rem;
+                position: relative;
+                z-index: 2;
             }
         }
 
@@ -79,6 +83,7 @@
             font-weight: 600;
             color: $text;
             line-height: 1.4;
+            margin: 0;
         }
 
         .category {
@@ -92,6 +97,7 @@
             letter-spacing: 0.5px;
             background-color: $bg;
             transition: all 0.3s ease;
+            margin: 0;
 
             &:hover {
                 background-color: $primary;
@@ -114,6 +120,7 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
             width: fit-content;
+            margin: 0;
         }
 
         .price {
@@ -121,11 +128,19 @@
             font-weight: 500;
             color: $primary;
             transition: all 0.3s ease;
+            margin: 0;
 
             &:hover {
                 scale: 1.025;
                 color: $secondary;
             }
+        }
+
+        .description {
+            font-size: 0.875rem;
+            color: $text-muted;
+            line-height: 1.4;
+            margin: 0;
         }
 
         .action {
@@ -162,29 +177,103 @@
 
     // Loading State
     .product-card.loading {
-    .img::after {
-        content: "Loading...";
-    }
-    
-    .title,
-    .category,
-    .price {
-        background-color: $bg-light;
-        border-radius: 4px;
-        color: transparent;
-        position: relative;
-        overflow: hidden;
+        .img::after {
+            content: "Loading...";
+            color: $text-muted;
+            position: relative;
+            z-index: 2;
+        }
         
-        &::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, $border-muted, transparent);
-        animation: loading 1.5s infinite;
+        .title,
+        .category,
+        .rating,
+        .price,
+        .description {
+            background-color: $bg-light;
+            border-radius: 4px;
+            color: transparent;
+            position: relative;
+            overflow: hidden;
+            margin: 0.25rem 0;
+            
+            &::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, $border-muted, transparent);
+                animation: loading 1.5s infinite;
+            }
+        }
+
+        .title {
+            height: 1.5rem;
+            width: 80%;
+        }
+
+        .category {
+            height: 1.25rem;
+            width: 40%;
+        }
+
+        .rating {
+            height: 1.25rem;
+            width: 60%;
+        }
+
+        .price {
+            height: 1.75rem;
+            width: 30%;
+        }
+
+        .description {
+            height: 2.5rem;
+            width: 100%;
         }
     }
+
+    // Utility classes
+    .loading-message,
+    .error-message,
+    .no-products-message {
+        text-align: center;
+        padding: 2rem;
+        font-size: 1.125rem;
+        width: 100%;
+    }
+
+    .error-message {
+        color: $danger;
+        
+        button {
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: $primary;
+            color: $text;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+
+            &:hover {
+                background: $secondary;
+            }
+        }
+    }
+
+    .no-products-message {
+        color: $text-muted;
+    }
+}
+
+// Loading animation
+@keyframes loading {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 100%;
     }
 }
