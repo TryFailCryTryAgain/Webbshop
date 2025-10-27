@@ -5,6 +5,7 @@ import { Product } from '../views/product';
 import LoginPage from '../views/login';
 import RegisterPage from '../views/register';
 import AdminDashboard from '../views/admin-dashboard';
+import UserDashboard from '../views/user-dashboard';
 
 const AppRoutes = () => {
     return (
@@ -14,6 +15,7 @@ const AppRoutes = () => {
             <Route path={RouterContainer.Login} element={<LoginPage />}></Route>
             <Route path={RouterContainer.Register} element={<RegisterPage />}></Route>
             <Route path={RouterContainer.AdminDashboard} element={<AdminDashboard />}></Route>
+            <Route path={RouterContainer.UserDashboard} element={<UserDashboard />}></Route>
         </Routes>
     )
 }

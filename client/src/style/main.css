@@ -19,6 +19,7 @@
   justify-content: space-evenly;
   align-items: center;
   border-bottom: 1px solid #4D4D4D;
+  padding: 0 20px;
 }
 .user-header .logo {
   font-size: 2rem;
@@ -39,6 +40,14 @@
   padding: 0 12px;
   transition: all 0.3s ease;
 }
+.user-header .nav-links li {
+  transition: all 0.3s ease;
+}
+.user-header .nav-links li a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
 .user-header .nav-links li:hover {
   color: #F2F2F2;
   cursor: pointer;
@@ -46,7 +55,29 @@
 .user-header .nav-links li:active {
   color: #14B8A6;
 }
-.user-header .sign-in {
+.user-header .search-bar input {
+  background-color: #262626;
+  border: 1px solid #4D4D4D;
+  border-radius: 4px;
+  padding: 6px 12px;
+  color: #F2F2F2;
+}
+.user-header .auth-buttons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.user-header .user-menu {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.user-header .user-menu .welcome-text {
+  color: #F2F2F2;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.user-header .sign-in, .user-header .sign-up, .user-header .dashboard-btn, .user-header .logout-btn {
   padding: 6px 12px;
   background-color: #14B8A6;
   border: none;
@@ -54,22 +85,30 @@
   color: #F2F2F2;
   font-size: 1rem;
   transition: all 0.3s ease;
-}
-.user-header .sign-in:hover {
   cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+.user-header .sign-in:hover, .user-header .sign-up:hover, .user-header .dashboard-btn:hover, .user-header .logout-btn:hover {
   background-color: #EC4899;
   scale: 1.05;
 }
-.user-header .sign-in:active {
+.user-header .sign-in:active, .user-header .sign-up:active, .user-header .dashboard-btn:active, .user-header .logout-btn:active {
   background-color: #14B8A6;
   scale: 1;
 }
-.user-header .search-bar input {
-  background-color: #262626;
-  border: 1px solid #4D4D4D;
-  border-radius: 4px;
-  padding: 6px 12px;
-  color: #F2F2F2;
+.user-header .sign-up {
+  background-color: rgb(25, 230, 207.5);
+}
+.user-header .sign-up:hover {
+  background-color: #EC4899;
+}
+.user-header .logout-btn {
+  background-color: rgb(15, 138, 124.5);
+}
+.user-header .logout-btn:hover {
+  background-color: #EC4899;
 }
 
 .main-product-container {

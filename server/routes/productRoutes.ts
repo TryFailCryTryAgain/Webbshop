@@ -2,14 +2,24 @@
 import express from 'express';
 import ProductController from '../controller/ProductController';
 
+const { 
+    getProducts,
+    getProductById,
+    getProductsByCategory,
+    getProductsByCategorySlug,
+    createProduct,
+    updateProduct,
+    deleteProduct 
+} = ProductController;
+
 const ProductRouter = express.Router();
 
-ProductRouter.get('/', ProductController.getProducts);
-ProductRouter.get('/:_id', ProductController.getProductById);
-ProductRouter.get('/category/:categoryId', ProductController.getProductsByCategory);
-ProductRouter.get('/category/slug/:slug', ProductController.getProductsByCategorySlug);
-ProductRouter.post('/', ProductController.createProduct);
-ProductRouter.put('/:_id', ProductController.updateProduct);
-ProductRouter.delete('/:_id', ProductController.deleteProduct);
+ProductRouter.get('/', getProducts);
+ProductRouter.get('/:_id', getProductById);
+ProductRouter.get('/category/:categoryId', getProductsByCategory);
+ProductRouter.get('/category/slug/:slug', getProductsByCategorySlug);
+ProductRouter.post('/', createProduct);
+ProductRouter.put('/:_id', updateProduct);
+ProductRouter.delete('/:_id', deleteProduct);
 
 export default ProductRouter;

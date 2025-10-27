@@ -7,6 +7,7 @@
     justify-content: space-evenly;
     align-items: center;
     border-bottom: 1px solid $border;
+    padding: 0 20px;
 
     .logo {
         font-size: 2rem;
@@ -28,6 +29,16 @@
         padding: 0 12px;
         transition: all 0.3s ease;
 
+        li {
+            transition: all 0.3s ease;
+            
+            a {
+                color: inherit;
+                text-decoration: none;
+                transition: color 0.3s ease;
+            }
+        }
+
         li:hover {
             color: $text;
             cursor: pointer;
@@ -38,7 +49,38 @@
         }
     }
 
-    .sign-in {
+    .search-bar {
+        input {
+            background-color: $bg-light;
+            border: 1px solid $border;
+            border-radius: 4px;
+            padding: 6px 12px;
+            color: $text;
+        }
+    }
+
+    // Auth buttons container - using existing .sign-in class
+    .auth-buttons {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+    }
+
+    // User menu container
+    .user-menu {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        
+        .welcome-text {
+            color: $text;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+    }
+
+    // Reuse .sign-in styles for all buttons
+    .sign-in, .sign-up, .dashboard-btn, .logout-btn {
         padding: 6px 12px;
         background-color: $primary;
         border: none;
@@ -46,27 +88,37 @@
         color: $text;
         font-size: 1rem;
         transition: all 0.3s ease;
-    }
-
-    .sign-in:hover {
         cursor: pointer;
-        background-color: $secondary;
-        scale: 1.05;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+
+        &:hover {
+            background-color: $secondary;
+            scale: 1.05;
+        }
+
+        &:active {
+            background-color: $primary;
+            scale: 1;
+        }
     }
 
-    .sign-in:active {
-        background-color: $primary;
-        scale: 1;
+    // Optional: Different color for sign-up button
+    .sign-up {
+        background-color: lighten($primary, 10%);
+        
+        &:hover {
+            background-color: $secondary;
+        }
     }
 
-    .search-bar {
-
-        input {
-            background-color: $bg-light;
-            border: 1px solid $border;
-            border-radius: 4px;
-            padding: 6px 12px;
-            color: $text;
+    // Optional: Different color for logout button
+    .logout-btn {
+        background-color: darken($primary, 10%);
+        
+        &:hover {
+            background-color: $secondary;
         }
     }
 }

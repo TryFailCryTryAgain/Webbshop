@@ -136,7 +136,7 @@ const updateUser = async (req: Request, res: Response): Promise<void> => {
             return;
         }
 
-        const { first_name, last_name, tel, email, password, adress, ZIP } = req.body;
+        const { first_name, last_name, tel, email, password, adress, ZIP, role } = req.body;
 
         user.first_name = first_name || user.first_name;
         user.last_name = last_name || user.last_name;
@@ -145,6 +145,7 @@ const updateUser = async (req: Request, res: Response): Promise<void> => {
         user.password = password || user.password;
         user.adress = adress || user.adress;
         user.ZIP = ZIP || user.ZIP;
+        user.role = role || user.role;
 
         await user.save();
         res.status(200).json(user);
