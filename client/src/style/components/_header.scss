@@ -29,6 +29,38 @@
         padding: 0 12px;
         transition: all 0.3s ease;
 
+        .category_dropdown_menu_container {
+            position: relative;
+            
+            .categories_dropdown_menu {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                width: 100%;
+                list-style-type: none;
+                text-align: center;
+                background-color: $bg;
+                margin-top: 5px;
+                border-radius: 2px;
+                z-index: 1000;
+
+                .categories_dropdown_menu_links {
+                    padding: 6px 0;
+                    color: $text-muted;
+                    font-size: .9rem;
+
+                    &:hover {
+                        color: $primary;
+                        background-color: $bg-light;
+                    }
+
+                    &.active {
+                        color: $secondary;
+                    }
+                }
+            }
+        }
+
         li {
             transition: all 0.3s ease;
             

@@ -1,8 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
 import { RouterContainer } from "../routes/RouterContainer";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { categoryAPI, type Category } from "../api/api";
 
 export const Header = () => {
+
+    const [dropdown, setDropDown] = useState(true);
+
     const navigate = useNavigate();
     
     const token = localStorage.getItem("token");
@@ -24,6 +29,42 @@ export const Header = () => {
         window.location.reload();
     };
 
+
+
+    // Fetching categories for the dropdown menu
+
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [error, setError] = useState<string | null>(null);
+
+
+    async function fetchCategories() {
+
+        if (dropdown === true) {
+            setDropDown(false);
+            return;
+        }
+
+        try {
+            const data = await categoryAPI.getCategories();
+            setCategories(data)
+            console.log(data);
+        } catch (err) {
+            setError('Failed to load categories');
+            console.error('Error fetching categories', err);
+        } finally {
+            setDropDown(true);
+        }     
+
+
+
+
+    }
+
+
+
+
+
+
     return (
         <>
             <nav className="user-header">
@@ -32,8 +73,24 @@ export const Header = () => {
                     <input type="text" placeholder="Search..."/>
                 </div>
                 <ul className="nav-links">
-                    <li><Link to="/">Home</Link></li>
-                    <li><Link to="/products">Products</Link></li>
+                    <li><Link to="/">Products</Link></li>
+                    <li 
+                        id="category_dropdown_menu_container" 
+                        className="category_dropdown_menu_container"
+                        onClick={() => fetchCategories()}
+                    >
+                        <Link to="#">Categories</Link>
+                        
+                        {dropdown && (
+                            <ul className="categories_dropdown_menu">
+                                {categories.map((category) => (
+                                    <li className="categories_dropdown_menu_links" id={category._id}>{category.title}</li>
+                                ))}
+                            </ul>
+                        )}
+
+                        
+                    </li>
                     <li><Link to="/about">About</Link></li>
                 </ul>
                 

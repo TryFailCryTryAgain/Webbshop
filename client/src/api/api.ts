@@ -27,7 +27,6 @@ export const productAPI = {
     // Fetch all products
     getProducts: async (): Promise<Product[]> => {
         const response = await axios.get(`${API_BASE_URL}/product`);
-        console.log(response.data);
         return response.data;
     },
 
@@ -37,3 +36,11 @@ export const productAPI = {
         return response.data;
     }
 };
+
+export const categoryAPI = {
+    // Fetch all categories
+    getCategories: async (): Promise<Category[]> => {
+        const response = await axios.get(`${API_BASE_URL}/category`);
+        return response.data;
+    }
+}
