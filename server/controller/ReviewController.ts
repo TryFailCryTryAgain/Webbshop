@@ -27,6 +27,40 @@ const getReviewById = async (req: Request, res: Response): Promise<void> => {
     }
 }
 
+const getReviewByUserId = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { userId } = req.params;
+        if (!userId) {
+            res.status(400).json({ userId: "UserId params is required! "});
+            return;
+        }
+        const reviews = await Review.find({ userId });
+        if (reviews.length === 0) {
+            res.status(404).json({ message: "No reviews found with the given ID! "});
+            return;
+        }
+        res.json(reviews);
+    } catch (err) {
+        res.status(500).json({ message: "Error fetching reviews "});
+    }
+}
+
+const getReviewByProductId = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { productId } = req.params;
+        if (!productId) {
+            res.status(400).json({ productId: "Product ID params is requried! "});
+        }
+        const reviews = await Review.find({ productId });
+        if (!reviews) {
+            res.status(404).json({ message: "No reviews found with the given ID! "});
+        }
+        res.json(reviews);
+    } catch (err) {
+        res.status(500).json({ message: "Error fetching reviews "});
+    }
+}
+
 const createReview = async (req: Request, res: Response): Promise<void> => {
     try {
         const { rating, description, userId, productId } = req.body
@@ -71,6 +105,12 @@ const updateReview = async (req: Request, res: Response): Promise<void> => {
         const oldDescription = review.description;
 
         if (oldProductId != productId || oldUserId != userId || oldRating != rating || oldDescription != description) {
+            
+            review.productId = productId;
+            review.userId = userId;
+            review.rating = rating;
+            review.description = description;            
+            
             const updated_at = new Date();
             updated_at.setDate(updated_at.getDate());
             review.updated_at = updated_at;
@@ -112,5 +152,7 @@ export default {
     getReviewById,
     createReview,
     updateReview,
-    deleteReview
+    deleteReview,
+    getReviewByUserId,
+    getReviewByProductId
 }

@@ -1,10 +1,11 @@
 
 
 import { Header } from "../components/header";
-import { act, useState } from "react";
+import { useState } from "react";
 import UserOrderTab from "../components/userTabs/UserOrderTab";
 import UserProfileTab from "../components/userTabs/UserProfileTab";
 import AdminDashboardTabs from "../components/adminDashboardTabs";
+import UserReviewTab from "../components/userTabs/UserReviewTab";
 
 const UserDashboard = () => {
 
@@ -21,7 +22,7 @@ const UserDashboard = () => {
             case 'orders': 
                 return <UserOrderTab />;
             case 'reviews':
-                return  <UserProfileTab />;
+                return  <UserReviewTab />;
             case 'profile':
                 return <UserProfileTab />;
         }

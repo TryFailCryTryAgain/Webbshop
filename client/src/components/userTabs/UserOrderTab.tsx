@@ -1,10 +1,10 @@
-
+import UserOrderTable from "../userTables/UserOrderTable";
 
 
 const UserOrderTab = () => {
     return (
         <>
-            <>User Order Tab</>
+            <UserOrderTable />
         </>
     );
 };

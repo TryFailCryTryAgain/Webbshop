@@ -1,8 +1,19 @@
 import { Link, useNavigate } from "react-router-dom";
-import { RouterContainer } from "../routes/RouterContainer";
+import { RouterContainer } from '../routes/RouterContainer';
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { categoryAPI, type Category } from "../api/api";
+
+interface Profile {
+    _id: string,
+    first_name: string,
+    last_name: string,
+    email: string,
+    adress: string,
+    ZIP: number,
+    role: string
+}
+
 
 export const Header = () => {
     const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -12,7 +23,7 @@ export const Header = () => {
     
     const token = localStorage.getItem("token");
     const user = localStorage.getItem("user");
-    const userData = user ? JSON.parse(user) : null;
+    const userData = user ? JSON.parse(user) as Profile : null;
 
     const handleLogout = () => {
         localStorage.removeItem("token");
@@ -114,11 +125,20 @@ export const Header = () => {
                 {token && userData ? (
                     <div className="user-menu">
                         <span className="welcome-text">
-                            Welcome, {userData.first_name}!
+                            <span className="user-icon"></span>{userData.first_name} {userData.last_name}
                         </span>
                         <Link to={RouterContainer.UserDashboard}>
-                            <button className="dashboard-btn">Dashboard</button>
+                            <button className="dashboard-btn">Profile</button>
                         </Link>
+                        {(userData.role === "admin") ? (
+                            <Link to={RouterContainer.AdminDashboard}>
+                                <button className="dashboard-btn">Dashboard</button>
+                            </Link>
+                        ) : (
+                            <>
+                            </>
+                        )}
+
                         <button 
                             className="logout-btn"
                             onClick={handleLogout}

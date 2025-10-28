@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { User } from '../../../server/model/UserModel';
 
 const API_BASE_URL = 'http://localhost:8080'; // Update with a .env location so it can be used with the deployed url later
 
@@ -21,6 +22,40 @@ export interface Product {
     created_at: string;
     updated_at: string;
     rate: string[];
+}
+
+export interface Order {
+    _id: string;
+    userId: string;
+    productId: string[];
+    created_at: string;
+    updated_at: string;
+    price: number;
+    delivery_date: Date;
+}
+
+export interface Review {
+    _id: string;
+    rating: number;
+    description: string;
+    userId: string;
+    productId: string;
+    created_at: Date;
+    updated_at: Date;
+}
+
+export const reviewAPI = {
+    getReviewsByUserId: async (id: string): Promise<Review[]> => {
+        const response = await axios.get(`${API_BASE_URL}/review/user/${id}`);
+        return response.data;
+    }
+}
+
+export const orderAPI = {
+    getOrdersByUserId: async (id: string): Promise<Order[]> => {
+        const response = await axios.get(`${API_BASE_URL}/order/user/${id}`);
+        return response.data;
+    }
 }
 
 export const productAPI = {

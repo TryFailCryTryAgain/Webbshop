@@ -29,6 +29,13 @@
         color: $text;
     }
 
+    td {
+        .product-id-small {
+            font-size: 0.6rem;
+            color: $text-muted;
+        }
+    }
+
     th {
         color: $text;
         font-weight: 600;

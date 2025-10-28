@@ -1,9 +1,10 @@
+import UserReviewTable from "../userTables/UserReviewTable";
 
 
 const UserReviewTab = () => {
     return (
         <>
-            user Review Tab
+            <UserReviewTable />
         </>
     );
 };

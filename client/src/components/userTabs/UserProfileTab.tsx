@@ -1,8 +1,9 @@
+import UserProfileTable from "../userTables/userProfileTable";
 
 const UserProfileTab = () => {
     return (
         <>
-            user profile tab
+            <UserProfileTable />
         </>
     );
 };
