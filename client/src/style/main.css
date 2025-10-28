@@ -103,6 +103,33 @@
   color: #F2F2F2;
   font-size: 0.9rem;
   font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+.user-header .user-menu .welcome-text .user-icon {
+  width: 14px;
+  height: 14px;
+  background-color: #14B8A6;
+  border-radius: 50vw;
+  display: block;
+}
+.user-header .cart {
+  padding: 6px 12px;
+  color: #14B8A6;
+  border: none;
+  border-radius: 7px;
+  font-size: 1.5rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+.user-header .cart:hover {
+  color: #EC4899;
+  scale: 1.05;
 }
 .user-header .sign-in, .user-header .sign-up, .user-header .dashboard-btn, .user-header .logout-btn {
   padding: 6px 12px;

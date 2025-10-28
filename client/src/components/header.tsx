@@ -119,13 +119,12 @@ export const Header = () => {
                             </ul>
                         )}
                     </li>
-                    <li><Link to="/about">About</Link></li>
                 </ul>
                 
                 {token && userData ? (
                     <div className="user-menu">
                         <span className="welcome-text">
-                            <span className="user-icon"></span>{userData.first_name} {userData.last_name}
+                            <i className="user-icon"></i>{userData.first_name} {userData.last_name}
                         </span>
                         <Link to={RouterContainer.UserDashboard}>
                             <button className="dashboard-btn">Profile</button>
@@ -145,6 +144,13 @@ export const Header = () => {
                         >
                             Logout
                         </button>
+                        <i 
+                            className="fa-solid fa-cart-shopping cart"
+                        >
+
+                        </i>
+
+
                     </div>
                 ) : (
                     <div className="auth-buttons">
