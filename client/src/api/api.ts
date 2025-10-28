@@ -34,6 +34,11 @@ export const productAPI = {
     getProductById: async (id: string): Promise<Product> => {
         const response = await axios.get(`${API_BASE_URL}/product/${id}`);
         return response.data;
+    },
+
+    getProductByCategory: async (id: string): Promise<Product[]> => {
+        const response = await axios.get(`${API_BASE_URL}/product/category/${id}`);
+        return response.data.products;
     }
 };
 

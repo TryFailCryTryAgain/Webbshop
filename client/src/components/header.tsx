@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 import { categoryAPI, type Category } from "../api/api";
 
 export const Header = () => {
-
-    const [dropdown, setDropDown] = useState(true);
-
+    const [dropdownVisible, setDropdownVisible] = useState(false);
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
     
     const token = localStorage.getItem("token");
@@ -15,55 +15,59 @@ export const Header = () => {
     const userData = user ? JSON.parse(user) : null;
 
     const handleLogout = () => {
-        // Clear localStorage
         localStorage.removeItem("token");
         localStorage.removeItem("user");
-        
-        // Clear axios default headers
         delete axios.defaults.headers.common['Authorization'];
-        
-        // Redirect to login page
         navigate(RouterContainer.Login);
-        
-        // Optional: Force reload to update all components
         window.location.reload();
     };
 
-
-
-    // Fetching categories for the dropdown menu
-
-    const [categories, setCategories] = useState<Category[]>([]);
-    const [error, setError] = useState<string | null>(null);
-
-
+    // Fetch categories when dropdown is about to be shown
     async function fetchCategories() {
-
-        if (dropdown === true) {
-            setDropDown(false);
-            return;
+        // If dropdown is not visible and we don't have categories yet, fetch them
+        if (!dropdownVisible && categories.length === 0) {
+            try {
+                const data = await categoryAPI.getCategories();
+                setCategories(data);
+                console.log(data);
+            } catch (err) {
+                setError('Failed to load categories');
+                console.error('Error fetching categories', err);
+            }
         }
-
-        try {
-            const data = await categoryAPI.getCategories();
-            setCategories(data)
-            console.log(data);
-        } catch (err) {
-            setError('Failed to load categories');
-            console.error('Error fetching categories', err);
-        } finally {
-            setDropDown(true);
-        }     
-
-
-
-
+        
+        // Toggle dropdown visibility
+        setDropdownVisible(!dropdownVisible);
     }
 
+    function navigateToCategoryPage(id: string) {
+        const categoryId = id;
+        const ShortenCategoryId = id.slice(0, 6);
 
+        navigate(RouterContainer.Category.replace(':id', ShortenCategoryId), {
+            state: {
+                categoryId: categoryId
+            }
+        });
+        
+        // Close dropdown after navigation
+        setDropdownVisible(false);
+    }
 
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            const dropdownContainer = document.getElementById("category_dropdown_menu_container");
+            if (dropdownContainer && !dropdownContainer.contains(event.target as Node)) {
+                setDropdownVisible(false);
+            }
+        };
 
-
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     return (
         <>
@@ -77,19 +81,32 @@ export const Header = () => {
                     <li 
                         id="category_dropdown_menu_container" 
                         className="category_dropdown_menu_container"
-                        onClick={() => fetchCategories()}
                     >
-                        <Link to="#">Categories</Link>
+                        {/* Only handle click on the link to toggle dropdown */}
+                        <a 
+                            href="#" 
+                            onClick={(e) => {
+                                e.preventDefault();
+                                fetchCategories();
+                            }}
+                            style={{ cursor: 'pointer' }}
+                        >
+                            Categories
+                        </a>
                         
-                        {dropdown && (
+                        {dropdownVisible && (
                             <ul className="categories_dropdown_menu">
                                 {categories.map((category) => (
-                                    <li className="categories_dropdown_menu_links" id={category._id}>{category.title}</li>
+                                    <li 
+                                        className="categories_dropdown_menu_links" 
+                                        key={category._id}
+                                        onClick={() => navigateToCategoryPage(category._id)}
+                                    >
+                                        {category.title}
+                                    </li>
                                 ))}
                             </ul>
                         )}
-
-                        
                     </li>
                     <li><Link to="/about">About</Link></li>
                 </ul>

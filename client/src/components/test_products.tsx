@@ -1,12 +1,15 @@
 import React from "react";
 import type { Product } from "../api/api";
+import { useNavigate } from "react-router";
+import { RouterContainer } from "../routes/RouterContainer";
 
 interface TestProductProps {
     product: Product;
 }
 
 const TestProduct: React.FC<TestProductProps> = ({ product }) => {
-    console.log('Rendering product:', product); // Debug log
+
+    const navigate = useNavigate();
 
     // Calculate average rating - handle empty array
     const calculateAverageRating = (ratings: string[]): number => {
@@ -33,6 +36,21 @@ const TestProduct: React.FC<TestProductProps> = ({ product }) => {
     const averageRating = calculateAverageRating(product.rate);
     const starRating = averageRating > 0 ? renderStars(averageRating) : 'No ratings yet';
 
+
+    function NavigateToProductPage() {
+
+        const productId = product._id;
+        const ShortenId = productId.slice(0, 6)
+
+        navigate(RouterContainer.Product.replace(':id', ShortenId), {
+            state: {
+                product: product,
+                productId: product._id
+            }
+        });
+   
+    }
+
     return (
         <div className="product-card">
             <div className="img">
@@ -50,7 +68,13 @@ const TestProduct: React.FC<TestProductProps> = ({ product }) => {
                 )}
             </div>
             <div className="info">
-                <div className="title">{product.title || 'No Title'}</div>
+                <div 
+                    className="title"
+                    style={{cursor: "pointer"}}
+                    onClick={() => NavigateToProductPage()}
+                >
+                    {product.title || 'No Title'}
+                </div>
                 <div className="category">
                     {product.category ? product.category.title : 'Uncategorized'}
                 </div>

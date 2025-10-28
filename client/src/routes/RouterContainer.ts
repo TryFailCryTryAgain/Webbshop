@@ -5,7 +5,7 @@ export const RouterContainer = {
     Register: "/register",
     UserDashboard: "/user-dashboard", // Add :id later
     AdminDashboard: "/admin-dashboard",
-    Product: "/product",
+    Product: "/product/:id",
     Category: "/category/:id",
     Collection: "/collection"
 }
