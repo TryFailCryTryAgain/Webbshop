@@ -13,11 +13,11 @@ UserRouter.post("/login", loginUser);
 
 // Protected Routes
 
-UserRouter.get("/", authenticateToken, getUsers);
-UserRouter.get("/first/:first_name", authenticateToken, getUsersByFirstName);
-UserRouter.get("/last/:last_name", authenticateToken, getUsersByLastName);
-UserRouter.get("/id/:_id", authenticateToken, getUserById);
-UserRouter.get("/current", authenticateToken, getCurrentUser);
+UserRouter.get("/", getUsers);
+UserRouter.get("/first/:first_name", getUsersByFirstName);
+UserRouter.get("/last/:last_name", getUsersByLastName);
+UserRouter.get("/id/:_id", getUserById);
+UserRouter.get("/current", getCurrentUser);
 UserRouter.put("/:_id", authenticateToken, updateUser);
 UserRouter.delete("/:_id", authenticateToken, deleteUser);
 UserRouter.get("/session", authenticateToken, getSessionInfo);

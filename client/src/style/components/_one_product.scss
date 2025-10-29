@@ -45,10 +45,7 @@
             font-size: 1.25rem;
             letter-spacing: 0.25rem;
             font-weight: 600;
-            background: linear-gradient(135deg, $warning 60%, $text-muted 60%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: $warning;
             width: fit-content;
         }
     }

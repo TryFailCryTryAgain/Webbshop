@@ -44,9 +44,35 @@ export interface Review {
     updated_at: Date;
 }
 
+export interface Profile {
+    _id: string,
+    email: string,
+    password: string,
+    adress: string;
+    ZIP: string;
+    city: string;
+    first_name: string;
+    last_name: string;
+    role: string;
+    tel: number;
+    updated_at: Date;
+}
+
+export const userAPI = {
+    getUserById: async (id: string): Promise<Profile> => {
+        const response = await axios.get(`${API_BASE_URL}/user/id/${id}`);
+        return response.data;
+    }
+}
+
 export const reviewAPI = {
     getReviewsByUserId: async (id: string): Promise<Review[]> => {
         const response = await axios.get(`${API_BASE_URL}/review/user/${id}`);
+        return response.data;
+    },
+
+    getReviewsByProductId: async (id: string): Promise<Review[]> => {
+        const response = await axios.get(`${API_BASE_URL}/review/product/${id}`);
         return response.data;
     }
 }

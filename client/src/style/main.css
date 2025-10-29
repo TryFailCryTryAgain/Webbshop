@@ -271,10 +271,7 @@
   font-size: 1.25rem;
   letter-spacing: 0.25rem;
   font-weight: 600;
-  background: linear-gradient(135deg, #FBBF24 60%, #BFBFBF 60%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #FBBF24;
   width: fit-content;
   margin: 0;
 }
@@ -452,10 +449,7 @@
   font-size: 1.25rem;
   letter-spacing: 0.25rem;
   font-weight: 600;
-  background: linear-gradient(135deg, #FBBF24 60%, #BFBFBF 60%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #FBBF24;
   width: fit-content;
 }
 .main-product-container2 .img-container {
@@ -677,27 +671,27 @@
 .review-container .review-card .user-info .profile-img {
   height: 40px;
   width: 40px;
-  background: linear-gradient(135deg, #0D0D0D, #262626);
+  background: linear-gradient(135deg, #14B8A6, #EC4899);
   border-radius: 50vw;
 }
 .review-container .review-card .user-info .profile-info {
   display: flex;
   flex-direction: column;
+  gap: 10px;
+  margin-top: -5px;
 }
 .review-container .review-card .user-info .profile-info .rating {
   font-size: 1.25rem;
   letter-spacing: 0.25rem;
   font-weight: 600;
-  background: linear-gradient(135deg, #FBBF24 60%, #BFBFBF 60%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #FBBF24;
   width: fit-content;
 }
 .review-container .review-card .user-info .profile-info .username {
   font-size: 1.125rem;
   font-weight: 600;
   line-height: 0;
+  color: #14B8A6;
 }
 .review-container .review-card .description {
   color: #BFBFBF;

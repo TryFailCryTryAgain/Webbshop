@@ -5,27 +5,21 @@ import { RouterContainer } from "../routes/RouterContainer";
 
 interface TestProductProps {
     product: Product;
+    averageRating?: number | null;
+    reviewCount?: number;
 }
 
-const TestProduct: React.FC<TestProductProps> = ({ product }) => {
-
+const TestProduct: React.FC<TestProductProps> = ({ 
+    product, 
+    averageRating = null, 
+    reviewCount = 0 
+}) => {
     const navigate = useNavigate();
 
-    // Calculate average rating - handle empty array
-    const calculateAverageRating = (ratings: string[]): number => {
-        if (!ratings || ratings.length === 0) return 0;
-        
-        const numericRatings = ratings.map(rating => {
-            const num = parseFloat(rating);
-            return isNaN(num) ? 0 : num;
-        });
-        
-        const sum = numericRatings.reduce((acc, rating) => acc + rating, 0);
-        return sum / numericRatings.length;
-    };
-
     // Convert rating to stars
-    const renderStars = (rating: number): string => {
+    const renderStars = (rating: number | null): string => {
+        if (rating === null || rating === 0) return '☆☆☆☆☆';
+        
         const fullStars = Math.floor(rating);
         const halfStar = rating % 1 >= 0.5 ? 1 : 0;
         const emptyStars = 5 - fullStars - halfStar;
@@ -33,14 +27,14 @@ const TestProduct: React.FC<TestProductProps> = ({ product }) => {
         return '★'.repeat(fullStars) + '½'.repeat(halfStar) + '☆'.repeat(emptyStars);
     };
 
-    const averageRating = calculateAverageRating(product.rate);
-    const starRating = averageRating > 0 ? renderStars(averageRating) : 'No ratings yet';
+    const starRating = renderStars(averageRating);
+    const ratingText = averageRating 
+        ? `${averageRating.toFixed(1)} from ${reviewCount} review${reviewCount !== 1 ? 's' : ''}`
+        : 'No ratings yet';
 
-
-    function NavigateToProductPage() {
-
+    const NavigateToProductPage = () => {
         const productId = product._id;
-        const ShortenId = productId.slice(0, 6)
+        const ShortenId = productId.slice(0, 6);
 
         navigate(RouterContainer.Product.replace(':id', ShortenId), {
             state: {
@@ -48,8 +42,7 @@ const TestProduct: React.FC<TestProductProps> = ({ product }) => {
                 productId: product._id
             }
         });
-   
-    }
+    };
 
     return (
         <div className="product-card">
@@ -71,16 +64,16 @@ const TestProduct: React.FC<TestProductProps> = ({ product }) => {
                 <div 
                     className="title"
                     style={{cursor: "pointer"}}
-                    onClick={() => NavigateToProductPage()}
+                    onClick={NavigateToProductPage}
                 >
                     {product.title || 'No Title'}
                 </div>
                 <div className="category">
                     {product.category ? product.category.title : 'Uncategorized'}
                 </div>
-                <div className="rating" title={averageRating > 0 ? `${averageRating.toFixed(1)} out of 5` : 'No ratings'}>
+                <div className="rating" title={ratingText}>
                     {starRating} 
-                    {product.rate && product.rate.length > 0 && ` (${product.rate.length})`}
+                    {/* <span className="rating-text"> ({reviewCount})</span> */}
                 </div>
                 <div className="price">${product.price ? product.price.toFixed(2) : '0.00'}</div>
                 <div className="description">
