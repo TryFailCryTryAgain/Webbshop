@@ -114,9 +114,9 @@ export const ProductPage = () => {
         console.log(product);
     }
 
-    const logReviews = () => {
-        console.log(reviews);
-    }
+    // const logReviews = () => {
+    //     console.log(reviews);
+    // }
 
     return (
         <>
@@ -145,9 +145,9 @@ export const ProductPage = () => {
                             <button className="add-to-cart">Add to Cart</button>
                             <button 
                                 className="wishlist"
-                                onClick={logReviews}
+                                // onClick={}
                             >
-                                Wishlist
+                                Leave a Review
                             </button>
                         </div>
                     </div>

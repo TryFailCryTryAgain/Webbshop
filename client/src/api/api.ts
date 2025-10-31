@@ -124,6 +124,11 @@ export const orderAPI = {
     getOrdersByUserId: async (id: string): Promise<Order[]> => {
         const response = await axios.get(`${API_BASE_URL}/order/user/${id}`);
         return response.data;
+    },
+
+    getOrders: async (): Promise<Order[]> => {
+        const response = await axios.get(`${API_BASE_URL}/order`);
+        return response.data;
     }
 }
 

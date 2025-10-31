@@ -1,76 +1,113 @@
+import type { Product, Review } from "../../api/api";
+import { useEffect, useState } from "react";
 
+interface TopProductsRatingProps {
+    reviews: Review[];
+    products: Product[];
+}
 
+interface ProductRating {
+    productId: string;
+    title: string;
+    price: number;
+    averageRating: number;
+    totalReviews: number;
+}
 
-export const TopProductsRating = () => {
-    
+export const TopProductsRating: React.FC<TopProductsRatingProps> = ({
+    reviews,
+    products
+}) => {
+    const [topProducts, setTopProducts] = useState<ProductRating[]>([]);
+
+    useEffect(() => {
+        const filterTopFiveProductsByRating = () => {
+            // Create a map to store product ratings data
+            const productRatingsMap = new Map<string, { totalRating: number; reviewCount: number; product: Product }>();
+            
+            // Initialize the map with all products
+            products.forEach(product => {
+                productRatingsMap.set(product._id, {
+                    totalRating: 0,
+                    reviewCount: 0,
+                    product: product
+                });
+            });
+            
+            // Aggregate ratings for each product
+            reviews.forEach(review => {
+                const productData = productRatingsMap.get(review.productId);
+                if (productData) {
+                    productData.totalRating += review.rating;
+                    productData.reviewCount += 1;
+                }
+            });
+            
+            // Convert map to array and calculate average ratings
+            const productsWithRatings: ProductRating[] = Array.from(productRatingsMap.entries())
+                .map(([productId, data]) => ({
+                    productId,
+                    title: data.product.title,
+                    price: data.product.price,
+                    averageRating: data.reviewCount > 0 ? data.totalRating / data.reviewCount : 0,
+                    totalReviews: data.reviewCount
+                }))
+                .filter(product => product.totalReviews > 0) // Only include products with reviews
+                .sort((a, b) => b.averageRating - a.averageRating) // Sort by average rating descending
+                .slice(0, 5); // Take top 5
+            
+            setTopProducts(productsWithRatings);
+        };
+
+        filterTopFiveProductsByRating();
+    }, [reviews, products]);
+
+    // Helper function to render stars based on rating
+    const renderStars = (rating: number) => {
+        const fullStars = Math.floor(rating);
+        const hasHalfStar = rating % 1 >= 0.5;
+        const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+        
+        return (
+            <>
+                {'★'.repeat(fullStars)}
+                {hasHalfStar && '☆'}
+                {'☆'.repeat(emptyStars)}
+                {` (${rating.toFixed(1)})`}
+            </>
+        );
+    };
+
     return (
-        <>
-            <div className="data-table-container">
-                <h3 className="chart-title">Top 5 Products by Rating</h3>
-                <table className="data-table">
-                    <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th>Average Rating</th>
-                            <th>Total Reviews</th>
-                            <th>Price</th>
-                            <th>Actions</th>
+        <div className="data-table-container">
+            <h3 className="chart-title">Top 5 Products by Rating</h3>
+            <table className="data-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Average Rating</th>
+                        <th>Total Reviews</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {topProducts.map((product) => (
+                        <tr key={product.productId}>
+                            <td>{product.title}</td>
+                            <td>{renderStars(product.averageRating)}</td>
+                            <td>{product.totalReviews}</td>
+                            <td>${product.price.toFixed(2)}</td>
                         </tr>
-                    </thead>
-                    <tbody>
+                    ))}
+                    {topProducts.length === 0 && (
                         <tr>
-                            <td>Wireless Headphones Pro</td>
-                            <td>★★★★★ (4.9)</td>
-                            <td>247</td>
-                            <td>$199.99</td>
-                            <td className="action-buttons">
-                                <button className="btn btn-primary">View</button>
-                                <button className="btn btn-warning">Edit</button>
+                            <td colSpan={5} style={{ textAlign: 'center' }}>
+                                No products with reviews found.
                             </td>
                         </tr>
-                        <tr>
-                            <td>Smart Fitness Watch</td>
-                            <td>★★★★★ (4.8)</td>
-                            <td>189</td>
-                            <td>$249.99</td>
-                            <td className="action-buttons">
-                                <button className="btn btn-primary">View</button>
-                                <button className="btn btn-warning">Edit</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Bluetooth Speaker</td>
-                            <td>★★★★☆ (4.7)</td>
-                            <td>156</td>
-                            <td>$79.99</td>
-                            <td className="action-buttons">
-                                <button className="btn btn-primary">View</button>
-                                <button className="btn btn-warning">Edit</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Gaming Keyboard</td>
-                            <td>★★★★☆ (4.6)</td>
-                            <td>132</td>
-                            <td>$129.99</td>
-                            <td className="action-buttons">
-                                <button className="btn btn-primary">View</button>
-                                <button className="btn btn-warning">Edit</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Phone Case - Premium</td>
-                            <td>★★★★☆ (4.5)</td>
-                            <td>98</td>
-                            <td>$29.99</td>
-                            <td className="action-buttons">
-                                <button className="btn btn-primary">View</button>
-                                <button className="btn btn-warning">Edit</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </>
+                    )}
+                </tbody>
+            </table>
+        </div>
     );
 };
