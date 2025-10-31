@@ -159,27 +159,28 @@ const UserOrderTable = () => {
         fetchOrdersAndProducts();
     }, [user]);
 
-    function CheckStatus() {
-        if (user) {
-            console.log('User ID:', user._id);
-            console.log('Orders:', orders);
-            console.log('Product Titles:', productTitles);
+
+    // -- Debugg function --
+    // function CheckStatus() {
+    //     if (user) {
+    //         console.log('User ID:', user._id);
+    //         console.log('Orders:', orders);
+    //         console.log('Product Titles:', productTitles);
             
-            // Debug: Check the actual structure of productId in orders
-            orders.forEach((order, index) => {
-                console.log(`Order ${index} productId:`, order.productId);
-                order.productId.forEach((item, itemIndex) => {
-                    console.log(`Order ${index}, item ${itemIndex}:`, item, 'Type:', typeof item);
-                });
-            });
-        } else {
-            console.log("User not found");
-        }
-    }
+    //         // Debug: Check the actual structure of productId in orders
+    //         orders.forEach((order, index) => {
+    //             console.log(`Order ${index} productId:`, order.productId);
+    //             order.productId.forEach((item, itemIndex) => {
+    //                 console.log(`Order ${index}, item ${itemIndex}:`, item, 'Type:', typeof item);
+    //             });
+    //         });
+    //     } else {
+    //         console.log("User not found");
+    //     }
+    // }
 
     return (
         <>
-            <button onClick={() => CheckStatus()}>Check Status (Debug)</button>
             {loading && <div>Loading products...</div>}
             <div className="data-table-container">
                 <table className="data-table">
@@ -187,8 +188,7 @@ const UserOrderTable = () => {
                         <tr>
                             <th>Products</th>
                             <th>Total</th>
-                            <th>Date</th>
-                            <th>Actions</th>
+                            <th>Due Date</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -197,11 +197,6 @@ const UserOrderTable = () => {
                                 <td>{getProductTitlesForOrder(order)}</td>
                                 <td>${order.price.toFixed(2)}</td>
                                 <td>{new Date(order.delivery_date).toLocaleDateString()}</td>
-                                <td>
-                                    <button className="view-details-btn">
-                                        View Details
-                                    </button>
-                                </td>
                             </tr>
                         ))}
                         {orders.length === 0 && (

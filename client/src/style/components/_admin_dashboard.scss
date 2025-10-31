@@ -79,6 +79,15 @@
                     color: $text;
                     font-weight: 400;
                 }
+
+                input {
+                    background-color: $bg-light;
+                    color: $text;
+                    border-radius: 4px;
+                    border: 1px solid $border;
+                    padding: 3px 6px;
+                    margin-left: 5px;
+                }
             }
         }
 
@@ -98,6 +107,7 @@
                 background-color: $bg-light;
                 border: 1px solid;
                 cursor: pointer;
+                transition: all 0.3s ease;
             }
 
             .edit {
@@ -116,6 +126,26 @@
 
                 &:hover {
                     background-color: $danger;
+                    color: $text;
+                }
+            }
+
+            .save {
+                border-color: $success;
+                color: $success;
+
+                &:hover {
+                    background-color: $success;
+                    color: $text;
+                }
+            }
+
+            .cancel {
+                border-color: $warning;
+                color: $warning;
+
+                &:hover {
+                    background-color: $warning;
                     color: $text;
                 }
             }
