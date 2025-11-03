@@ -11,11 +11,10 @@ interface Profile {
     role: string
 }
 
-// Update the Order interface to reflect the actual data structure
 interface Order {
     _id: string;
     userId: string;
-    productId: any[]; // Change to any[] to handle both strings and objects
+    productId: any[];
     created_at: string;
     updated_at: string;
     price: number;
@@ -146,7 +145,6 @@ const UserOrderTable = () => {
             try {
                 // Fetch orders first
                 const ordersData = await orderAPI.getOrdersByUserId(user._id);
-                console.log('Fetched orders:', ordersData); // Debug log to see actual data structure
                 setOrders(ordersData);
                 
                 // Then fetch product titles for these orders

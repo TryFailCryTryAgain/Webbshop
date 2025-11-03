@@ -309,14 +309,14 @@ const UserReviewTable = () => {
                                     {editingReviewId === review._id ? (
                                         <>
                                             <button 
-                                                className="btn-success"
+                                                className="btn btn-success"
                                                 onClick={() => handleSaveEdit(review._id)}
                                                 disabled={actionLoading === review._id}
                                             >
                                                 {actionLoading === review._id ? "Saving..." : "Save"}
                                             </button>
                                             <button 
-                                                className="btn-warning"
+                                                className="btn btn-warning"
                                                 onClick={handleCancelEdit}
                                                 disabled={actionLoading === review._id}
                                             >
@@ -326,14 +326,14 @@ const UserReviewTable = () => {
                                     ) : (
                                         <>
                                             <button 
-                                                className="btn-secondary"
+                                                className="btn btn-secondary"
                                                 onClick={() => handleEditClick(review)}
                                                 disabled={actionLoading !== null}
                                             >
                                                 Edit
                                             </button>
                                             <button 
-                                                className="btn-danger"
+                                                className="btn btn-danger"
                                                 onClick={() => handleDeleteReview(review._id)}
                                                 disabled={actionLoading !== null}
                                             >

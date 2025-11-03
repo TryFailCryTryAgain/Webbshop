@@ -1,0 +1,26 @@
+@import '../variables';
+
+.edit-form-overlay {
+    position: fixed;
+    background-color: $bg-dark;
+    border: 1px solid $border;
+    border-radius: 4px;
+    padding: 20px;
+    color: $text;
+    height: auto;
+    width: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    .edit-form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        h4 {
+            color: $text-muted;
+        }
+    }
+}

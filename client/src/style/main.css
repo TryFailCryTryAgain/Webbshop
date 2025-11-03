@@ -1536,6 +1536,9 @@
   align-items: center;
   justify-content: center;
 }
+.data-table-container .action-buttons .btn:hover {
+  scale: 1.05;
+}
 .data-table-container .action-buttons .btn-primary {
   background-color: #14B8A6;
   color: #0D0D0D;
@@ -1586,4 +1589,27 @@
 .data-table-container .pagination .active {
   background-color: #14B8A6;
   color: #0D0D0D;
+}
+
+.edit-form-overlay {
+  position: fixed;
+  background-color: #0D0D0D;
+  border: 1px solid #4D4D4D;
+  border-radius: 4px;
+  padding: 20px;
+  color: #F2F2F2;
+  height: auto;
+  width: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.edit-form-overlay .edit-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.edit-form-overlay .edit-form h4 {
+  color: #BFBFBF;
 }/*# sourceMappingURL=main.css.map */
