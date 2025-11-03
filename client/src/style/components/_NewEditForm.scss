@@ -1,0 +1,76 @@
+@import '../variables';
+
+
+.edit-window {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-height: 400px;
+    width: auto;
+    background-color: $bg-dark;
+    padding: 20px;
+    border-radius: 14px;
+    border: 1px solid $border;
+    color: $text;
+
+    .edit-form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            
+            label {
+                font-weight: 500;
+            }
+
+            input {
+                padding: 3px 6px;
+                color: $text-muted;
+                background-color: $bg-light;
+                border: none;
+                border-radius: 4px;
+            }
+        }
+
+        .form-action {
+            display: flex;
+            gap: 10px;
+
+            .btn {
+                border: 1px solid;
+                border-radius: 4px;
+                padding: 3px 6px;
+                background-color: $bg-light;
+                transition: all 0.3s ease;
+            }
+
+            .save {
+                border-color: $success;
+                color: $success;
+
+                &:hover {
+                    background-color: $success;
+                    color: $text;
+                }
+            }
+
+            .cancel {
+                border-color: $warning;
+                color: $warning;
+
+                &:hover {
+                    background-color: $warning;
+                    color: $text;
+                }
+            }
+        }
+    }
+}

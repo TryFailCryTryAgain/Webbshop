@@ -1612,4 +1612,67 @@
 }
 .edit-form-overlay .edit-form h4 {
   color: #BFBFBF;
+}
+
+.edit-window {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-height: 400px;
+  width: auto;
+  background-color: #0D0D0D;
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid #4D4D4D;
+  color: #F2F2F2;
+}
+.edit-window .edit-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+.edit-window .edit-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.edit-window .edit-form .form-group label {
+  font-weight: 500;
+}
+.edit-window .edit-form .form-group input {
+  padding: 3px 6px;
+  color: #BFBFBF;
+  background-color: #262626;
+  border: none;
+  border-radius: 4px;
+}
+.edit-window .edit-form .form-action {
+  display: flex;
+  gap: 10px;
+}
+.edit-window .edit-form .form-action .btn {
+  border: 1px solid;
+  border-radius: 4px;
+  padding: 3px 6px;
+  background-color: #262626;
+  transition: all 0.3s ease;
+}
+.edit-window .edit-form .form-action .save {
+  border-color: #34D399;
+  color: #34D399;
+}
+.edit-window .edit-form .form-action .save:hover {
+  background-color: #34D399;
+  color: #F2F2F2;
+}
+.edit-window .edit-form .form-action .cancel {
+  border-color: #FBBF24;
+  color: #FBBF24;
+}
+.edit-window .edit-form .form-action .cancel:hover {
+  background-color: #FBBF24;
+  color: #F2F2F2;
 }/*# sourceMappingURL=main.css.map */
