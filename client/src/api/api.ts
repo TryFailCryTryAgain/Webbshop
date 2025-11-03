@@ -148,7 +148,19 @@ export const productAPI = {
     getProductByCategory: async (id: string): Promise<Product[]> => {
         const response = await axios.get(`${API_BASE_URL}/product/category/${id}`);
         return response.data.products;
+    },
+
+    createProduct: async (productData: Omit<Product, '_id' | 'rate'>): Promise<Product> => {
+        const response = await axios.post(`${API_BASE_URL}/product`, productData);
+        return response.data;
+    },
+
+    deleteProduct: async (id: string): Promise<{ message: string, product: Product}> => {
+        const response = await axios.delete(`${API_BASE_URL}/product/${id}`);
+        return response.data;
     }
+
+
 };
 
 export const categoryAPI = {
