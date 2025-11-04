@@ -8,6 +8,18 @@
     align-items: center;
     padding: 2rem;
     color: $text;
+
+    .error-message {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+        justify-content: center;
+
+        button {
+            max-width: 200px;
+        }
+    }
     
     .product-container-layout {
         display: grid;

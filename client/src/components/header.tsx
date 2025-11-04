@@ -25,6 +25,9 @@ export const Header = () => {
     const user = localStorage.getItem("user");
     const userData = user ? JSON.parse(user) as Profile : null;
 
+    // Const logic for the cart asidebar
+    const [CartBar, setCartBar] = useState(true);
+
     const handleLogout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
@@ -82,6 +85,13 @@ export const Header = () => {
 
     return (
         <>
+            {CartBar && (
+                <>
+                    <aside className="cart-bar">
+                        
+                    </aside>
+                </>
+            )}
             <nav className="user-header">
                 <div className="logo">Webbshop</div>
                 <div className="search-bar">

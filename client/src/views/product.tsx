@@ -1,8 +1,7 @@
 import { Header } from "../components/header";
-import TestReview from "../components/test_reviews";
 import { useLocation } from "react-router";
 import type { Product } from "../api/api";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { reviewAPI, userAPI } from '../api/api';
 
 interface Review {
@@ -24,17 +23,67 @@ interface LocationState {
     productId: string;
 }
 
+interface Profile {
+    _id: string,
+    first_name: string,
+    last_name: string,
+    email: string,
+    adress: string,
+    ZIP: number,
+    role: string
+}
+
 export const ProductPage = () => {
     const location = useLocation();
     const state = location.state as LocationState;
     const [reviews, setReviews] = useState<Review[]>([]);
     const [reviewAvr, setReviewAvr] = useState<number | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [starRating, setStarRating] = useState<string>('☆☆☆☆☆');
     const [userNames, setUserNames] = useState<UserMap>({});
     const [loadingUsers, setLoadingUsers] = useState<boolean>(false);
+    const [submitting, setSubmitting] = useState<boolean>(false);
+    
+    const user = localStorage.getItem("user");
+    const userData = user ? JSON.parse(user) as Profile : null;
+
+    // For the creation of a review
+    const [reviewFormData, setReviewFormData] = useState({
+        rating: 0,
+        description: ""
+    });
 
     const { product, productId } = state;
+
+    // Check if user is authenticated
+    if (!userData) {
+        return (
+            <>
+                <Header />
+                <div className="main-product-container2">
+                    <div className="error-message">Please log in to view this product page.</div>
+                </div>
+            </>
+        );
+    }
+
+    const renderStarRating = (currentRating: number, onChange: (rating: number) => void) => {
+        return (
+            <div className="star-rating-input">
+                {[1, 2, 3, 4, 5].map((star) => (
+                    <span
+                        key={star}
+                        className={`star ${star <= currentRating ? 'filled' : ''}`}
+                        onClick={() => onChange(star)}
+                        style={{ cursor: 'pointer', fontSize: '1.5rem' }}
+                    >
+                        {star <= currentRating ? '★' : '☆'}
+                    </span>
+                ))}
+            </div>
+        );
+    };
 
     // Function to convert numeric rating to star display
     const getStarRating = (rating: number | null): string => {
@@ -114,9 +163,72 @@ export const ProductPage = () => {
         console.log(product);
     }
 
-    // const logReviews = () => {
-    //     console.log(reviews);
-    // }
+    const handleReviewFormChange = (field: string, value: string | number) => {
+        setReviewFormData(prev => ({
+            ...prev,
+            [field]: value
+        }));
+    };
+
+    async function createNewReview(e: FormEvent) {
+        e.preventDefault();
+        setSubmitting(true);
+        setError(null);
+        
+        // Validation
+        if (reviewFormData.rating === 0) {
+            setError('Please select a rating');
+            setSubmitting(false);
+            return;
+        }
+        
+        if (!reviewFormData.description.trim()) {
+            setError('Please write a review description');
+            setSubmitting(false);
+            return;
+        }
+
+        const reviewData = {
+            productId: product._id,
+            rating: reviewFormData.rating,
+            description: reviewFormData.description,
+            userId: userData._id
+        }
+
+        try {
+            const response = await reviewAPI.createReview(reviewData);
+            
+            // Clear the form
+            setReviewFormData({
+                rating: 0,
+                description: ""
+            });
+            
+            // Refresh the reviews list
+            const updatedReviews = await reviewAPI.getReviewsByProductId(product._id);
+            setReviews(updatedReviews);
+            
+            // Update average rating
+            const average = calculateAverageRating(updatedReviews);
+            setReviewAvr(average);
+            setStarRating(getStarRating(average));
+            
+            // Refresh usernames
+            if (updatedReviews.length > 0) {
+                await fetchUserNames(updatedReviews);
+            }
+            
+            console.log('Review created successfully:', response);
+            setSuccessMessage('Review submitted successfully!');
+            setTimeout(() => setSuccessMessage(null), 3000);
+            
+        } catch (err) {
+            console.error("Failed to create new review", err);
+            setError('Failed to submit review. Please try again.');
+        } finally {
+            setSubmitting(false);
+        }
+    }
 
     return (
         <>
@@ -132,6 +244,9 @@ export const ProductPage = () => {
                     <div className="title">{product.title}</div>
                     <div className="rating">
                         <div className="star-rating">{starRating}</div>
+                        {/* {reviewAvr !== null && (
+                            <span className="average-rating">({reviewAvr.toFixed(1)} out of 5)</span>
+                        )} */}
                     </div>
                 </div>
                 
@@ -143,12 +258,9 @@ export const ProductPage = () => {
                         <div className="price">${product.price}</div>
                         <div className="action-buttons">
                             <button className="add-to-cart">Add to Cart</button>
-                            <button 
-                                className="wishlist"
-                                // onClick={}
-                            >
+                            {/* <button className="wishlist">
                                 Leave a Review
-                            </button>
+                            </button> */}
                         </div>
                     </div>
                 </div>
@@ -157,30 +269,66 @@ export const ProductPage = () => {
                     <h2 className="title">Product Information</h2>
                     <div className="info">{product.description}</div>
                 </div>
+
+                <div className="review-container">
+                    <h2 className="review-title">Leave a Review</h2>
+                    {successMessage && <div className="success-message">{successMessage}</div>}
+                    {error && <div className="error-message">{error}</div>}
+                    
+                    <form className="create-review-form" onSubmit={createNewReview}>
+                        {/* Star rating input */}
+                        <div className="form-group">
+                            {renderStarRating(reviewFormData.rating, (rating) => handleReviewFormChange('rating', rating))}
+                        </div>
+                        
+                        <div className="form-group">
+                            <label htmlFor="description">Description</label>
+                            <input 
+                                type="text"
+                                onChange={(e) => handleReviewFormChange('description', e.target.value)}
+                                value={reviewFormData.description}
+                                placeholder="Share your thoughts about this product..."
+                                disabled={submitting}
+                            />
+                        </div>
+                        
+                        <button 
+                            type="submit" 
+                            className="submit"
+                            disabled={submitting}
+                        >
+                            {submitting ? 'Submitting...' : 'Submit Review'}
+                        </button>
+                    </form>
+                </div>
                 
                 <div className="review-container">
                     <h2 className="review-title">Customer Reviews</h2>
-                    {error && <div className="error-message">{error}</div>}
-
-                    {/* Test reviews section with proper usernames */}
-                    <div className="test-reviews">
-                        {reviews.map((review) => (
-                            <div key={review._id} className="review-card">
-                                <div className="user-info">
-                                    <div className="profile-img"></div>
-                                    <div className="profile-info">
-                                        <div className="rating">{getStarRating(review.rating)}</div>
-                                        <div className="username">
-                                            {loadingUsers ? 'Loading...' : userNames[review.userId] || 'Unknown User'}
+                    {reviews.length === 0 ? (
+                        <div className="no-reviews">No reviews yet. Be the first to review this product!</div>
+                    ) : (
+                        <div className="test-reviews">
+                            {reviews.map((review) => (
+                                <div key={review._id} className="review-card">
+                                    <div className="user-info">
+                                        <div className="profile-img"></div>
+                                        <div className="profile-info">
+                                            <div className="rating">{getStarRating(review.rating)}</div>
+                                            <div className="username">
+                                                {loadingUsers ? 'Loading...' : userNames[review.userId] || 'Unknown User'}
+                                            </div>
+                                            <div className="review-date">
+                                                {new Date(review.created_at).toLocaleDateString()}
+                                            </div>
                                         </div>
                                     </div>
+                                    <div className="description">
+                                        {review.description}
+                                    </div>
                                 </div>
-                                <div className="description">
-                                    {review.description}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
         </>

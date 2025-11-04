@@ -174,6 +174,16 @@
   padding: 2rem;
   color: #F2F2F2;
 }
+.main-product-container .error-message {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+.main-product-container .error-message button {
+  max-width: 200px;
+}
 .main-product-container .product-container-layout {
   display: grid;
   grid-template-columns: repeat(3, minmax(280px, 1fr));
@@ -652,6 +662,36 @@
   width: 100%;
   gap: 20px;
 }
+.review-container .create-review-form {
+  display: block;
+  gap: 10px;
+}
+.review-container .create-review-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.review-container .create-review-form .form-group input {
+  max-width: 400px;
+  background-color: #262626;
+  color: #F2F2F2;
+  border-radius: 4px;
+  padding: 6px 12px;
+  border: none;
+}
+.review-container .create-review-form .submit {
+  margin-top: 10px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  border: 1px solid #34D399;
+  color: #34D399;
+  background-color: #262626;
+  transition: all 0.3s ease;
+}
+.review-container .create-review-form .submit:hover {
+  background-color: #34D399;
+  color: #F2F2F2;
+}
 .review-container .review-title {
   font-size: 1.5rem;
   justify-content: flex-start;
@@ -661,6 +701,7 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
+  margin-bottom: 20px;
 }
 .review-container .review-card .user-info {
   display: flex;
@@ -1675,4 +1716,16 @@
 .edit-window .edit-form .form-action .cancel:hover {
   background-color: #FBBF24;
   color: #F2F2F2;
+}
+
+.cart-bar {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 20%;
+  background-color: green;
+  z-index: 10;
+  left: 100;
 }/*# sourceMappingURL=main.css.map */

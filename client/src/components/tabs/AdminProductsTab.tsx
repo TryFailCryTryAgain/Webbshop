@@ -511,7 +511,7 @@ const AdminProductsTab = () => {
                     </tbody>
                 </table>
                 {loading && (
-                    <div style={{ textAlign: 'center', padding: '2rem' }}>
+                    <div style={{ textAlign: 'center', padding: '2rem', color: '#F2F2F2' }}>
                         Loading products...
                     </div>
                 )}
