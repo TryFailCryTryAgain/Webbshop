@@ -3,7 +3,6 @@ import { RouterContainer } from '../routes/RouterContainer';
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { categoryAPI, type Category, orderAPI } from "../api/api";
-import type { Product } from "../api/api";
 import { 
     getCartItemsFromStorage, 
     removeProductFromStorage, 
@@ -26,7 +25,7 @@ interface Profile {
 export const Header = () => {
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [categories, setCategories] = useState<Category[]>([]);
-    const [error, setError] = useState<string | null>(null);
+    const [_error, setError] = useState<string | null>(null);
     const [cartBar, setCartBar] = useState(false);
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const navigate = useNavigate();

@@ -1,4 +1,4 @@
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, plugins } from 'chart.js';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import type { Order } from '../../api/api';
 import { useEffect, useState } from 'react';
@@ -72,7 +72,7 @@ export const OrderByStatusDonutChart: React.FC<OrderByStatusDonutChartProps> = (
     const options = {
         plugins: {
             legend: {
-                position: 'bottom',
+                position: 'bottom' as const,
                 labels: {
                     boxWidth: 12,
                     padding: 20,

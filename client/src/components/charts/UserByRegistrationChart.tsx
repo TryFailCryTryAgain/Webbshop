@@ -142,7 +142,7 @@ export const UserByRegistrationLineChart = ({ users }: UserByRegistrationLineCha
         },
         ticks: {
           maxTicksLimit: 10, // Limit number of labels shown
-          callback: function(value: any, index: number) {
+          callback: function(_value: any, index: number) {
             // Show every 4th label to prevent overcrowding
             return index % 4 === 0 ? labels[index] : '';
           }

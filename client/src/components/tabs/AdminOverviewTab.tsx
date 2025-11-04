@@ -1,6 +1,4 @@
 import { OrderByStatusDonutChart } from "../charts/OrderByStatusChart";
-import { UserByRegistrationLineChart } from "../charts/UserByRegistrationChart";
-import { BtmProductsRating } from "../tables/btm5productsRating";
 import { TopProductsRating } from "../tables/top5productsRating";
 import { type Profile, type Order, type Review, type Product, productAPI, orderAPI, reviewAPI, userAPI } from '../../api/api';
 import { useEffect, useState } from "react";

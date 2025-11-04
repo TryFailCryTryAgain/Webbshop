@@ -1,5 +1,5 @@
 import { Header } from "../components/header";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { productAPI } from "../api/api";
 import type { Product } from "../api/api";
 import { useLocation } from "react-router";
@@ -12,8 +12,8 @@ interface LocationState {
 
 const Specific_Category = () => {
     const [products, setProducts] = useState<Product[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
+    const [_loading, setLoading] = useState<boolean>(true);
+    const [_error, setError] = useState<string | null>(null);
 
     const location = useLocation();
     const state = location.state as LocationState;
@@ -38,13 +38,6 @@ const Specific_Category = () => {
 
     }, [categoryId])
 
-
-    function Testing() {
-        console.log(products);
-    }
-
-
-
     return (
         <>
             <Header />
@@ -57,7 +50,6 @@ const Specific_Category = () => {
                     ) : (
                         <>
                             <p>No products found in this category.</p>
-                            <button onClick={() => Testing()}></button>
                         </>
                     )}
                 </div>

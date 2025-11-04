@@ -1,8 +1,8 @@
-import type { Product } from "../api/api";
+import type { Product } from "../tables/AdminOrderTable";
 
 export interface CartItem {
     product: Product;
-    quantity: number;w
+    quantity: number;
 }
 
 // Add product to cart or increase quantity if already exists

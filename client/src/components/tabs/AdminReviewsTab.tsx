@@ -27,7 +27,7 @@ interface User {
     email: string,
     password: string,
     adress: string;
-    ZIP: string;
+    ZIP: number;
     city: string;
     first_name: string;
     last_name: string;

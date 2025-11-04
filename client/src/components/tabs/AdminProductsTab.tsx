@@ -1,16 +1,31 @@
 import { useEffect, useState } from "react";
 import { productAPI, type Product, type Category, categoryAPI } from "../../api/api";
 
+// Create a type for product form data that uses category ID as string
+type ProductFormData = {
+    title: string;
+    description: string;
+    price: number;
+    images: string[];
+    category: string; // Category ID as string for forms
+};
+
 const AdminProductsTab = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(false);
     const [editingProductId, setEditingProductId] = useState<string | null>(null);
-    const [editFormData, setEditFormData] = useState<Partial<Product>>({});
+    const [editFormData, setEditFormData] = useState<ProductFormData>({
+        title: "",
+        description: "",
+        price: 0,
+        images: [""],
+        category: ""
+    });
     const [message, setMessage] = useState("");
     const [actionLoading, setActionLoading] = useState<string | null>(null);
     const [createWindow, setCreateWindow] = useState(false);
-    const [newProductData, setNewProductData] = useState({
+    const [newProductData, setNewProductData] = useState<ProductFormData>({
         title: "",
         description: "",
         price: 0,
@@ -54,6 +69,11 @@ const AdminProductsTab = () => {
         return "";
     };
 
+    // Helper function to find category object by ID
+    const getCategoryById = (categoryId: string): Category | undefined => {
+        return categories.find(cat => cat._id === categoryId);
+    };
+
     const formatDate = (date: string | undefined | null): string => {
         if (!date) return "N/A";
         try {
@@ -80,11 +100,17 @@ const AdminProductsTab = () => {
 
     const handleCancelEdit = () => {
         setEditingProductId(null);
-        setEditFormData({});
+        setEditFormData({
+            title: "",
+            description: "",
+            price: 0,
+            images: [""],
+            category: ""
+        });
         setMessage("");
     };
 
-    const handleEditFormChange = (field: string, value: string | number | string[]) => {
+    const handleEditFormChange = (field: keyof ProductFormData, value: string | number | string[]) => {
         setEditFormData(prev => ({
             ...prev,
             [field]: value
@@ -101,16 +127,21 @@ const AdminProductsTab = () => {
         setMessage("");
 
         try {
-            // Filter out undefined values and assert the type
-            const filteredData = Object.fromEntries(
-                Object.entries(editFormData).filter(([_, value]) => value !== undefined)
-            ) as Omit<Product, '_id' | 'rate'>;
+            // Find the category object to match the Product type expectation
+            const categoryObj = getCategoryById(editFormData.category);
+            if (!categoryObj) {
+                setMessage("Invalid category selected");
+                return;
+            }
 
-            // Since we don't have updateProduct in API, we'll need to handle this
-            // For now, we'll just update locally until API is extended
+            // Update local state with proper Category object
             const updatedProduct: Product = {
                 ...products.find(p => p._id === productId)!,
-                ...filteredData,
+                title: editFormData.title,
+                description: editFormData.description,
+                price: editFormData.price,
+                images: editFormData.images,
+                category: categoryObj, // Use Category object, not string ID
                 updated_at: new Date().toISOString()
             };
 
@@ -121,7 +152,13 @@ const AdminProductsTab = () => {
 
             setMessage("Product updated successfully! (Local update - API update not implemented)");
             setEditingProductId(null);
-            setEditFormData({});
+            setEditFormData({
+                title: "",
+                description: "",
+                price: 0,
+                images: [""],
+                category: ""
+            });
         } catch (error: any) {
             console.error("Failed to update product:", error);
             setMessage(error.response?.data?.message || "Failed to update product");
@@ -176,7 +213,7 @@ const AdminProductsTab = () => {
         });
     };
 
-    const handleCreateFormChange = (field: string, value: string | number | string[]) => {
+    const handleCreateFormChange = (field: keyof ProductFormData, value: string | number | string[]) => {
         setNewProductData(prev => ({
             ...prev,
             [field]: value
@@ -216,12 +253,19 @@ const AdminProductsTab = () => {
         setMessage("");
 
         try {
+            // Find the category object for the API call
+            const categoryObj = getCategoryById(newProductData.category);
+            if (!categoryObj) {
+                setMessage("Invalid category selected");
+                return;
+            }
+
             const createdProduct = await productAPI.createProduct({
                 title: newProductData.title,
                 description: newProductData.description,
                 price: newProductData.price,
                 images: newProductData.images.filter(img => img.trim() !== ""),
-                category: newProductData.category
+                category: categoryObj // Pass the Category object, not the string ID
             });
 
             // Add the new product to the list
@@ -395,7 +439,7 @@ const AdminProductsTab = () => {
                                     {editingProductId === product._id ? (
                                         <input
                                             type="text"
-                                            value={editFormData.title || ""}
+                                            value={editFormData.title}
                                             onChange={(e) => handleEditFormChange('title', e.target.value)}
                                             style={{ width: '100%', padding: '0.5rem' }}
                                         />
@@ -406,7 +450,7 @@ const AdminProductsTab = () => {
                                 <td>
                                     {editingProductId === product._id ? (
                                         <textarea
-                                            value={editFormData.description || ""}
+                                            value={editFormData.description}
                                             onChange={(e) => handleEditFormChange('description', e.target.value)}
                                             rows={3}
                                             style={{ width: '100%', padding: '0.5rem' }}
@@ -421,7 +465,7 @@ const AdminProductsTab = () => {
                                     {editingProductId === product._id ? (
                                         <input
                                             type="number"
-                                            value={editFormData.price || 0}
+                                            value={editFormData.price}
                                             onChange={(e) => handleEditFormChange('price', parseFloat(e.target.value))}
                                             step="0.01"
                                             min="0"
@@ -434,7 +478,7 @@ const AdminProductsTab = () => {
                                 <td>
                                     {editingProductId === product._id ? (
                                         <select
-                                            value={editFormData.category || ""}
+                                            value={editFormData.category}
                                             onChange={(e) => handleEditFormChange('category', e.target.value)}
                                             style={{ width: '100%', padding: '0.5rem' }}
                                         >

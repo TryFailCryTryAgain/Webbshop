@@ -7,7 +7,7 @@ interface Profile {
     last_name: string,
     email: string,
     adress: string,
-    ZIP: string,
+    ZIP: number,
     role: string
 }
 
@@ -285,7 +285,7 @@ export const AdminOrderTable = () => {
                 delivery_date: new Date(editDeliveryDate)
             };
 
-            await orderAPI.updateOrder(editOrder._id, updatedOrder);
+            // await orderAPI.updateOrder(editOrder._id, updatedOrder);
             
             // Update local state
             setOrders(prevOrders => 
@@ -317,7 +317,7 @@ export const AdminOrderTable = () => {
 
         try {
             setLoading(true);
-            await orderAPI.deleteOrder(orderId);
+            // await orderAPI.deleteOrder(orderId);
             
             // Update local state
             setOrders(prevOrders => prevOrders.filter(order => order._id !== orderId));
@@ -351,9 +351,9 @@ export const AdminOrderTable = () => {
         });
     };
 
-    const addProduct = (productId: string) => {
-        updateProductQuantity(productId, 1);
-    };
+    // const addProduct = (productId: string) => {
+    //     updateProductQuantity(productId, 1);
+    // };
 
     const getProductQuantity = (productId: string): number => {
         const pq = productQuantities.find(pq => pq.productId === productId);

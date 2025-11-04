@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { productAPI, reviewAPI } from "../api/api";
 import type { Product, Review } from "../api/api";
 import TestProduct from "./test_products";

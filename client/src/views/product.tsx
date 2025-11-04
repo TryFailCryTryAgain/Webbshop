@@ -42,7 +42,7 @@ export const ProductPage = () => {
     const location = useLocation();
     const state = location.state as LocationState;
     const [reviews, setReviews] = useState<Review[]>([]);
-    const [reviewAvr, setReviewAvr] = useState<number | null>(null);
+    const [_reviewAvr, setReviewAvr] = useState<number | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [starRating, setStarRating] = useState<string>('☆☆☆☆☆');
@@ -63,7 +63,7 @@ export const ProductPage = () => {
         description: ""
     });
 
-    const { product, productId } = state;
+    const { product } = state;
 
     // Check cart status for this product
     useEffect(() => {
@@ -233,6 +233,12 @@ export const ProductPage = () => {
         e.preventDefault();
         setSubmitting(true);
         setError(null);
+
+        if (!userData?._id) {
+            setError('User not found. Please log in again.');
+            setSubmitting(false);
+            return;
+        }
         
         // Validation
         if (reviewFormData.rating === 0) {

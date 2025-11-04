@@ -48,7 +48,7 @@ export interface Profile {
     email: string,
     password: string,
     adress: string;
-    ZIP: string;
+    ZIP: number;
     city: string;
     first_name: string;
     last_name: string;
@@ -159,7 +159,7 @@ export const productAPI = {
         return response.data.products;
     },
 
-    createProduct: async (productData: Omit<Product, '_id' | 'rate'>): Promise<Product> => {
+    createProduct: async (productData: Omit<Product, '_id' | 'rate' | 'updated_at' | 'created_at'>): Promise<Product> => {
         const response = await axios.post(`${API_BASE_URL}/product/`, productData);
         return response.data;
     },
