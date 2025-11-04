@@ -35,7 +35,8 @@ const AdminUsersTab = () => {
             ZIP: user.ZIP,
             city: user.city,
             role: user.role,
-            tel: user.tel
+            tel: user.tel,
+            password: '' // Initialize password as empty for security
         });
         setEditWindow(true);
     }
@@ -68,9 +69,15 @@ const AdminUsersTab = () => {
             setLoading(true);
             const token = localStorage.getItem('token') || '';
             
-            // Filter out undefined values and assert the type
+            // Filter out undefined values and empty password (don't update password if empty)
             const filteredData = Object.fromEntries(
-                Object.entries(formData).filter(([_, value]) => value !== undefined)
+                Object.entries(formData).filter(([key, value]) => {
+                    // Keep all fields except password if it's empty
+                    if (key === 'password') {
+                        return value !== '' && value !== undefined;
+                    }
+                    return value !== undefined;
+                })
             ) as Partial<Omit<Profile, '_id' | 'updated_at' | 'created_at'>>;
 
             const updatedUser = await userAPI.updateUser(editData._id, token, filteredData);
@@ -144,6 +151,17 @@ const AdminUsersTab = () => {
                             </div>
 
                             <div className="form-group">
+                                <label htmlFor="password">Password</label>
+                                <input 
+                                    type="password" 
+                                    name="password"
+                                    value={formData.password || ''}
+                                    onChange={handleInputChange}
+                                    placeholder="New password"
+                                />
+                            </div>
+
+                            <div className="form-group">
                                 <label htmlFor="adress">Address</label>
                                 <input 
                                     type="text" 
@@ -153,7 +171,7 @@ const AdminUsersTab = () => {
                                 />
                             </div>
 
-                            {/* <div className="form-group">
+                            <div className="form-group">
                                 <label htmlFor="city">City</label>
                                 <input 
                                     type="text" 
@@ -161,7 +179,7 @@ const AdminUsersTab = () => {
                                     value={formData.city || ''}
                                     onChange={handleInputChange}
                                 />
-                            </div> */}
+                            </div>
 
                             <div className="form-group">
                                 <label htmlFor="ZIP">ZIP</label>

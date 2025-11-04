@@ -3,6 +3,11 @@ import { useLocation } from "react-router";
 import type { Product } from "../api/api";
 import { useEffect, useState, type FormEvent } from "react";
 import { reviewAPI, userAPI } from '../api/api';
+import { 
+    addProductToStorage, 
+    getProductQuantity,
+    isProductInCart 
+} from "../components/cart-functions/cart-functions";
 
 interface Review {
     _id: string;
@@ -45,6 +50,10 @@ export const ProductPage = () => {
     const [loadingUsers, setLoadingUsers] = useState<boolean>(false);
     const [submitting, setSubmitting] = useState<boolean>(false);
     
+    // Add to cart state
+    const [isInCart, setIsInCart] = useState(false);
+    const [currentQuantity, setCurrentQuantity] = useState(0);
+    
     const user = localStorage.getItem("user");
     const userData = user ? JSON.parse(user) as Profile : null;
 
@@ -55,6 +64,29 @@ export const ProductPage = () => {
     });
 
     const { product, productId } = state;
+
+    // Check cart status for this product
+    useEffect(() => {
+        const checkCartStatus = () => {
+            setIsInCart(isProductInCart(product._id));
+            setCurrentQuantity(getProductQuantity(product._id));
+        };
+
+        checkCartStatus();
+
+        // Listen for cart updates from other components
+        const handleStorageChange = () => {
+            checkCartStatus();
+        };
+
+        window.addEventListener('storage', handleStorageChange);
+        window.addEventListener('cartUpdated', handleStorageChange);
+
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+            window.removeEventListener('cartUpdated', handleStorageChange);
+        };
+    }, [product._id]);
 
     // Check if user is authenticated
     if (!userData) {
@@ -67,6 +99,33 @@ export const ProductPage = () => {
             </>
         );
     }
+
+    // Add to cart functionality
+    const handleAddToCart = () => {
+        addProductToStorage(product);
+        setIsInCart(true);
+        setCurrentQuantity(getProductQuantity(product._id));
+        
+        // Dispatch custom event to notify other components
+        window.dispatchEvent(new Event('cartUpdated'));
+        
+        // Show feedback
+        const button = document.querySelector('.add-to-cart');
+        if (button) {
+            const originalText = button.textContent;
+            button.textContent = 'Added to Cart!';
+            setTimeout(() => {
+                button.textContent = originalText;
+            }, 1000);
+        }
+    };
+
+    const getButtonText = () => {
+        if (currentQuantity > 0) {
+            return `Add to Cart (${currentQuantity})`;
+        }
+        return 'Add to Cart';
+    };
 
     const renderStarRating = (currentRating: number, onChange: (rating: number) => void) => {
         return (
@@ -257,10 +316,18 @@ export const ProductPage = () => {
                     <div className="price-info">
                         <div className="price">${product.price}</div>
                         <div className="action-buttons">
-                            <button className="add-to-cart">Add to Cart</button>
-                            {/* <button className="wishlist">
-                                Leave a Review
-                            </button> */}
+                            <button 
+                                className={`add-to-cart ${isInCart ? 'in-cart' : ''}`}
+                                onClick={handleAddToCart}
+                            >
+                                {getButtonText()}
+                            </button>
+                            {isInCart && (
+                                <div className="cart-indicator">
+                                    <i className="fa-solid fa-check"></i>
+                                    In Cart
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

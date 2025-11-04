@@ -1,5 +1,22 @@
 @import '../variables';
 
+.data-table-header {
+    .btn-edit {
+        padding: 6px 12px;
+        background-color: $bg-light;
+        color: $primary;
+        border: 1px solid $primary;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+            background-color: $primary;
+            color: $text;
+        }
+    }
+}
+
 .data-table-container {
     background-color: transparent;
     width: 100%;

@@ -383,7 +383,6 @@ const AdminProductsTab = () => {
                             <th>Price</th>
                             <th>Category</th>
                             <th>Images</th>
-                            <th>Rating</th>
                             <th>Created At</th>
                             <th>Updated At</th>
                             <th>Actions</th>
@@ -456,9 +455,6 @@ const AdminProductsTab = () => {
                                     ) : (
                                         "No images"
                                     )}
-                                </td>
-                                <td>
-                                    {product.rate ? product.rate.length > 0 ? `${product.rate.length} ratings` : "No ratings" : "No ratings"}
                                 </td>
                                 <td>{formatDate(product.created_at)}</td>
                                 <td>{formatDate(product.updated_at)}</td>

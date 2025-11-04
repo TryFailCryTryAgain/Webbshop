@@ -55,15 +55,27 @@ const createOrder = async (req: Request, res: Response): Promise<void> => {
             return;
         }
 
-        // Check if all products exist and fetch their prices
-        const products = await Product.find({ _id: { $in: productId } });
-        if (products.length !== productId.length) {
+        // Get unique product IDs to check existence
+        const uniqueProductIds = [...new Set(productId)];
+        
+        // Check if all unique products exist
+        const uniqueProducts = await Product.find({ _id: { $in: uniqueProductIds } });
+        if (uniqueProducts.length !== uniqueProductIds.length) {
             res.status(404).json({ message: "One or more products not found!" });
             return;
         }
 
-        // Calculate total price
-        const totalPrice = products.reduce((sum, product) => sum + product.price, 0);
+        // Create a map of product prices for quick lookup
+        const productPriceMap = new Map();
+        uniqueProducts.forEach(product => {
+            productPriceMap.set(product._id.toString(), product.price);
+        });
+
+        // Calculate total price considering quantities (duplicates)
+        const totalPrice = productId.reduce((sum, id) => {
+            const price = productPriceMap.get(id);
+            return sum + (price || 0);
+        }, 0);
 
         // Calculate delivery date (7 days from now)
         const delivery_date = new Date();
@@ -74,7 +86,7 @@ const createOrder = async (req: Request, res: Response): Promise<void> => {
 
         const newOrder = new Order({
             userId,
-            productId,
+            productId, // This keeps the duplicates to maintain quantities
             price: totalPrice,
             delivery_date,
             created_at,

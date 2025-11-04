@@ -127,7 +127,16 @@ export const orderAPI = {
     },
 
     getOrders: async (): Promise<Order[]> => {
-        const response = await axios.get(`${API_BASE_URL}/order`);
+        const response = await axios.get(`${API_BASE_URL}/order/`);
+        return response.data;
+    },
+
+    createOrder: async (orderData: Omit<Order, '_id' | 'created_at' | 'updated_at' | 'price' | 'delivery_date'>): Promise<Order> => {
+        const response = await axios.post(`${API_BASE_URL}/order/`, orderData, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
         return response.data;
     }
 }
@@ -135,7 +144,7 @@ export const orderAPI = {
 export const productAPI = {
     // Fetch all products
     getProducts: async (): Promise<Product[]> => {
-        const response = await axios.get(`${API_BASE_URL}/product`);
+        const response = await axios.get(`${API_BASE_URL}/product/`);
         return response.data;
     },
 
@@ -151,7 +160,7 @@ export const productAPI = {
     },
 
     createProduct: async (productData: Omit<Product, '_id' | 'rate'>): Promise<Product> => {
-        const response = await axios.post(`${API_BASE_URL}/product`, productData);
+        const response = await axios.post(`${API_BASE_URL}/product/`, productData);
         return response.data;
     },
 
@@ -159,7 +168,6 @@ export const productAPI = {
         const response = await axios.delete(`${API_BASE_URL}/product/${id}`);
         return response.data;
     }
-
 
 };
 
