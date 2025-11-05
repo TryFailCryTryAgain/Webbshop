@@ -1,76 +1,168 @@
 @import '../variables';
 
-
 .edit-window {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    min-height: 400px;
-    width: auto;
-    background-color: $bg-dark;
-    padding: 20px;
-    border-radius: 14px;
-    border: 1px solid $border;
-    color: $text;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-height: 400px;
+  width: auto;
+  background-color: $bg-dark;
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid $border;
+  color: $text;
 
-    .edit-form {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 20px;
+  // Mobile-first responsive design
+  max-width: 95vw; // Prevent overflow on small screens
+  max-height: 90vh; // Prevent vertical overflow
+  overflow-y: auto; // Enable scrolling if content overflows
 
+  // Responsive padding
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            
-            label {
-                font-weight: 500;
-            }
+  @media (max-width: 480px) {
+    padding: 12px;
+    border-radius: 10px;
+  }
 
-            input {
-                padding: 3px 6px;
-                color: $text-muted;
-                background-color: $bg-light;
-                border: none;
-                border-radius: 4px;
-            }
-        }
+  .edit-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
 
-        .form-action {
-            display: flex;
-            gap: 10px;
-
-            .btn {
-                border: 1px solid;
-                border-radius: 4px;
-                padding: 3px 6px;
-                background-color: $bg-light;
-                transition: all 0.3s ease;
-            }
-
-            .save {
-                border-color: $success;
-                color: $success;
-
-                &:hover {
-                    background-color: $success;
-                    color: $text;
-                }
-            }
-
-            .cancel {
-                border-color: $warning;
-                color: $warning;
-
-                &:hover {
-                    background-color: $warning;
-                    color: $text;
-                }
-            }
-        }
+    // Reduce gap on smaller screens
+    @media (max-width: 768px) {
+      gap: 16px;
     }
+
+    @media (max-width: 480px) {
+      gap: 12px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      width: 100%; // Full width on mobile
+      max-width: 400px; // Limit width on larger screens
+
+      // Adjust width for different screen sizes
+      @media (max-width: 768px) {
+        max-width: 100%;
+      }
+
+      label {
+        font-weight: 500;
+        
+        // Adjust font size for mobile
+        @media (max-width: 480px) {
+          font-size: 0.9rem;
+        }
+      }
+
+      input {
+        padding: 3px 6px;
+        color: $text-muted;
+        background-color: $bg-light;
+        border: none;
+        border-radius: 4px;
+        width: 100%; // Full width inputs
+        
+        // Better touch targets on mobile
+        @media (max-width: 768px) {
+          padding: 8px 12px;
+          font-size: 16px; // Prevent zoom on iOS
+        }
+
+        @media (max-width: 480px) {
+          padding: 10px 12px;
+        }
+      }
+    }
+
+    .form-action {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      max-width: 400px;
+      
+      // Stack buttons vertically on very small screens
+      @media (max-width: 480px) {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .btn {
+        border: 1px solid;
+        border-radius: 4px;
+        padding: 3px 6px;
+        background-color: $bg-light;
+        transition: all 0.3s ease;
+        flex: 1; // Equal width buttons
+        text-align: center;
+        
+        // Better touch targets
+        @media (max-width: 768px) {
+          padding: 10px 16px;
+          min-height: 44px; // Minimum touch target size
+        }
+
+        @media (max-width: 480px) {
+          padding: 12px 16px;
+        }
+      }
+
+      .save {
+        border-color: $success;
+        color: $success;
+
+        &:hover {
+          background-color: $success;
+          color: $text;
+        }
+      }
+
+      .cancel {
+        border-color: $warning;
+        color: $warning;
+
+        &:hover {
+          background-color: $warning;
+          color: $text;
+        }
+      }
+    }
+  }
+}
+
+// Additional media query for very small screens
+@media (max-width: 320px) {
+  .edit-window {
+    min-height: 300px;
+    padding: 8px;
+    
+    .edit-form {
+      gap: 8px;
+      
+      .form-group {
+        gap: 3px;
+        
+        input {
+          padding: 8px 10px;
+        }
+      }
+      
+      .form-action {
+        .btn {
+          padding: 10px 12px;
+          font-size: 0.9rem;
+        }
+      }
+    }
+  }
 }

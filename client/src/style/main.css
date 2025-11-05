@@ -1681,6 +1681,20 @@
   border-radius: 14px;
   border: 1px solid #4D4D4D;
   color: #F2F2F2;
+  max-width: 95vw;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+@media (max-width: 768px) {
+  .edit-window {
+    padding: 16px;
+  }
+}
+@media (max-width: 480px) {
+  .edit-window {
+    padding: 12px;
+    border-radius: 10px;
+  }
 }
 .edit-window .edit-form {
   display: flex;
@@ -1689,13 +1703,35 @@
   align-items: center;
   gap: 20px;
 }
+@media (max-width: 768px) {
+  .edit-window .edit-form {
+    gap: 16px;
+  }
+}
+@media (max-width: 480px) {
+  .edit-window .edit-form {
+    gap: 12px;
+  }
+}
 .edit-window .edit-form .form-group {
   display: flex;
   flex-direction: column;
   gap: 5px;
+  width: 100%;
+  max-width: 400px;
+}
+@media (max-width: 768px) {
+  .edit-window .edit-form .form-group {
+    max-width: 100%;
+  }
 }
 .edit-window .edit-form .form-group label {
   font-weight: 500;
+}
+@media (max-width: 480px) {
+  .edit-window .edit-form .form-group label {
+    font-size: 0.9rem;
+  }
 }
 .edit-window .edit-form .form-group input {
   padding: 3px 6px;
@@ -1703,10 +1739,30 @@
   background-color: #262626;
   border: none;
   border-radius: 4px;
+  width: 100%;
+}
+@media (max-width: 768px) {
+  .edit-window .edit-form .form-group input {
+    padding: 8px 12px;
+    font-size: 16px;
+  }
+}
+@media (max-width: 480px) {
+  .edit-window .edit-form .form-group input {
+    padding: 10px 12px;
+  }
 }
 .edit-window .edit-form .form-action {
   display: flex;
   gap: 10px;
+  width: 100%;
+  max-width: 400px;
+}
+@media (max-width: 480px) {
+  .edit-window .edit-form .form-action {
+    flex-direction: column;
+    gap: 8px;
+  }
 }
 .edit-window .edit-form .form-action .btn {
   border: 1px solid;
@@ -1714,6 +1770,19 @@
   padding: 3px 6px;
   background-color: #262626;
   transition: all 0.3s ease;
+  flex: 1;
+  text-align: center;
+}
+@media (max-width: 768px) {
+  .edit-window .edit-form .form-action .btn {
+    padding: 10px 16px;
+    min-height: 44px;
+  }
+}
+@media (max-width: 480px) {
+  .edit-window .edit-form .form-action .btn {
+    padding: 12px 16px;
+  }
 }
 .edit-window .edit-form .form-action .save {
   border-color: #34D399;
@@ -1732,6 +1801,25 @@
   color: #F2F2F2;
 }
 
+@media (max-width: 320px) {
+  .edit-window {
+    min-height: 300px;
+    padding: 8px;
+  }
+  .edit-window .edit-form {
+    gap: 8px;
+  }
+  .edit-window .edit-form .form-group {
+    gap: 3px;
+  }
+  .edit-window .edit-form .form-group input {
+    padding: 8px 10px;
+  }
+  .edit-window .edit-form .form-action .btn {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+}
 .cart-bar {
   position: fixed;
   display: flex;
