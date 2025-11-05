@@ -1,5 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 // Define TypeScript interfaces
 interface User {
@@ -21,6 +24,8 @@ const LoginPage: React.FC = () => {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    
+    const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:8080';
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -36,7 +41,7 @@ const LoginPage: React.FC = () => {
 
             // Make API call with Axios
             const response = await axios.post<LoginResponse>(
-                "http://localhost:8080/user/login", 
+                `${API_BASE_URL}/user/login`, 
                 {
                     email: email,
                     password: password
@@ -63,22 +68,21 @@ const LoginPage: React.FC = () => {
             // Redirect to dashboard or home page
             window.location.href = "/user-dashboard";
 
-        } catch (err: any) {
-            // Handle errors
+        } catch (err: unknown) {
             console.error("Login error:", err);
             
-            if (err.response) {
-                // Server responded with error status
-                setError(err.response.data.message || "Login failed");
-            } else if (err.request) {
-                // Request was made but no response received
-                setError("Network error. Please check your connection.");
+            setIsLoading(false);
+            
+            if (err instanceof Error) {
+                // For standard Error objects
+                setError(err.message);
+            } else if (typeof err === 'string') {
+                // For string errors
+                setError(err);
             } else {
-                // Something else happened
+                // Fallback for other types
                 setError("An unexpected error occurred.");
             }
-        } finally {
-            setIsLoading(false);
         }
     };
 
