@@ -1,9 +1,8 @@
 import axios from 'axios';
-import dotenv from 'dotenv';
 
-dotenv.config();
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
 
-const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:8080'; // Update with a .env location so it can be used with the deployed url later
+// Update with a .env location so it can be used with the deployed url later
 
 export interface Category {
     _id: string;

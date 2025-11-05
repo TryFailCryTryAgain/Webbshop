@@ -1,8 +1,5 @@
 import { useState } from "react";
 import axios from "axios";
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 // Define TypeScript interfaces
 interface User {
@@ -24,8 +21,8 @@ const LoginPage: React.FC = () => {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    
-    const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:8080';
+
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
