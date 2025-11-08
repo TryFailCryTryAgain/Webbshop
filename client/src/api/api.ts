@@ -58,6 +58,8 @@ export interface Profile {
     created_at: Date;
 }
 
+
+
 export const userAPI = {
     getUserById: async (id: string): Promise<Profile> => {
         const response = await axios.get(`${API_BASE_URL}/user/id/${id}`);
