@@ -11,18 +11,6 @@ interface Review {
     updated_at: Date;
 }
 
-// interface Product {
-//     _id: string;
-//     title: string;
-//     description: string;
-//     category: string;
-//     price: number;
-//     images: string[];
-//     created_at: string;
-//     updated_at: string;
-//     rate: string[];
-// }
-
 interface Profile {
     _id: string,
     first_name: string,

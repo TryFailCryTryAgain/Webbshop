@@ -10,8 +10,12 @@
         padding: 3rem 2rem;
     }
 
-    @media (min-width: 1200px) {
-        padding: 4rem 20rem;
+    @media (min-width: 1400px) {
+        padding: 4rem 3rem;
+    }
+
+    @media (min-width: 1700px) {
+        padding: 5rem 20rem;
     }
 
     .dashboard-tabs {
@@ -88,6 +92,14 @@
                     padding: 3px 6px;
                     margin-left: 5px;
                 }
+            }
+        }
+
+        @media (max-width: 500px) {
+            .user-profile-grid {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
             }
         }
 

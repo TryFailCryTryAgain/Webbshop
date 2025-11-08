@@ -259,16 +259,16 @@ const AdminUsersTab = () => {
                                 <td>{user.role}</td>
                                 <td>{formatDate(user.created_at)}</td>
                                 <td>{formatDate(user.updated_at)}</td>
-                                <td>
+                                <td className="action-buttons">
                                     <button 
-                                        className="btn-edit" 
+                                        className="btn btn-info" 
                                         onClick={() => handleEdit(user)}
                                         disabled={loading}
                                     >
                                         Edit
                                     </button>
                                     <button 
-                                        className="btn-delete" 
+                                        className="btn btn-danger" 
                                         onClick={() => handleDelete(user._id)}
                                         disabled={loading}
                                     >

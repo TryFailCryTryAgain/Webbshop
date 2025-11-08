@@ -28,15 +28,24 @@
     padding: 20px;
     margin-bottom: 1rem;
 
+    // Mobile-first: Prevent horizontal overflow on container
+    box-sizing: border-box;
+    -webkit-overflow-scrolling: touch; // Smooth scrolling on iOS
+
     .chart-title {
         font-size: 1.25rem;
         margin-bottom: 1rem;
         color: $text;
+        word-wrap: break-word;
     }
 
     .data-table {
         width: 100%;
         border-collapse: collapse;
+        min-width: 600px; // Minimum width for horizontal scroll
+
+        // Ensure table doesn't exceed container width
+        max-width: 100%;
     }
 
     th, td {
@@ -44,12 +53,18 @@
         text-align: left;
         border-bottom: 1px solid $border-muted;
         color: $text;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        
+        // Prevent content from breaking layout
+        max-width: 200px; // Limit cell width
     }
 
     td {
         .product-id-small {
             font-size: 0.6rem;
             color: $text-muted;
+            word-break: break-all; // Allow long IDs to break
         }
     }
 
@@ -57,12 +72,13 @@
         color: $text;
         font-weight: 600;
         background-color: $bg;
+        position: sticky;
+        top: 0; // Keep headers visible during scroll
+        z-index: 10;
     }
-
 
     tr:hover {
         background-color: rgba($primary, 0.7);
-
     }
 
     .action-buttons {
@@ -70,7 +86,7 @@
         flex-direction: column;
         gap: .5rem;
         height: 100%;
-        min-height: 100px; // Match the typical height of other cells with content
+        min-height: 100px;
         justify-content: center;
 
         .btn {
@@ -86,9 +102,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            white-space: nowrap; // Prevent button text wrapping
 
             &:hover {
-                scale: 1.05;
+                transform: scale(1.05); // Use transform instead of scale for better performance
             }
         }
 
@@ -123,12 +140,12 @@
         }
     }
 
-
     .pagination {
         display: flex;
         justify-content: center;
         gap: 10px;
         margin-top: 10px;
+        flex-wrap: wrap; // Allow pagination to wrap on small screens
 
         button {
             padding: 8px 12px;
@@ -138,6 +155,8 @@
             cursor: pointer;
             border-radius: 4px;
             transition: all 0.3s ease;
+            min-width: 44px; // Touch-friendly minimum size
+            min-height: 44px;
 
             &:hover {
                 background-color: $primary;
@@ -156,5 +175,221 @@
         }
     }
 
+    // Tablet breakpoint - 1000px
+    @media (max-width: 1000px) {
+        padding: 15px;
+        
+        .chart-title {
+            font-size: 1.15rem;
+            margin-bottom: 0.875rem;
+        }
+        
+        th, td {
+            padding: 10px 12px;
+            font-size: 0.9rem;
+            max-width: 150px; // Reduce max width for tablets
+        }
+        
+        .action-buttons {
+            min-height: 80px;
+            gap: 0.4rem;
+            
+            .btn {
+                padding: 10px 14px;
+                font-size: 13px;
+                min-height: 35px;
+            }
+        }
+        
+        .pagination {
+            gap: 8px;
+            
+            button {
+                padding: 7px 10px;
+                font-size: 0.9rem;
+            }
+        }
+    }
 
+    // Small tablet breakpoint - 768px
+    @media (max-width: 768px) {
+        padding: 12px;
+        border-radius: 10px;
+        
+        .chart-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        th, td {
+            padding: 8px 10px;
+            font-size: 0.85rem;
+            max-width: 120px; // Further reduce for small tablets
+        }
+        
+        .data-table {
+            min-width: 500px;
+        }
+        
+        .action-buttons {
+            min-height: 70px;
+            gap: 0.3rem;
+            
+            .btn {
+                padding: 8px 10px;
+                font-size: 12px;
+                min-height: 32px;
+            }
+        }
+        
+        .pagination {
+            gap: 6px;
+            
+            button {
+                padding: 6px 8px;
+                font-size: 0.85rem;
+                min-width: 40px;
+                min-height: 40px;
+            }
+        }
+    }
+
+    // Mobile breakpoint - 480px
+    @media (max-width: 480px) {
+        padding: 10px;
+        border-radius: 8px;
+        margin-bottom: 0.75rem;
+        
+        // Improve scroll indication on mobile
+        &::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        &::-webkit-scrollbar-thumb {
+            background: $primary;
+            border-radius: 3px;
+        }
+        
+        .chart-title {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+            padding: 0 10px;
+        }
+        
+        th, td {
+            padding: 6px 8px;
+            font-size: 0.8rem;
+            max-width: 100px; // Very restricted for mobile
+            
+            // Truncate long text with ellipsis
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        // Allow specific cells to wrap if needed
+        td:nth-child(3) { // Products column
+            white-space: normal;
+            word-break: break-word;
+        }
+        
+        .data-table {
+            min-width: 400px;
+        }
+        
+        td {
+            .product-id-small {
+                font-size: 0.55rem;
+            }
+        }
+        
+        .action-buttons {
+            flex-direction: row;
+            min-height: 50px;
+            gap: 0.25rem;
+            
+            .btn {
+                padding: 6px 8px;
+                font-size: 11px;
+                min-height: 28px;
+                flex: 1;
+                min-width: 60px; // Ensure buttons remain usable
+            }
+        }
+        
+        .pagination {
+            gap: 4px;
+            
+            button {
+                padding: 5px 7px;
+                font-size: 0.8rem;
+                min-width: 35px;
+                min-height: 35px;
+            }
+        }
+    }
+
+    // Small mobile breakpoint - 360px
+    @media (max-width: 360px) {
+        padding: 8px 5px; // Reduced horizontal padding
+        
+        .chart-title {
+            font-size: 0.9rem;
+            padding: 0 5px;
+        }
+        
+        th, td {
+            padding: 5px 6px;
+            font-size: 0.75rem;
+            max-width: 80px; // Even more restricted for very small screens
+        }
+        
+        .data-table {
+            min-width: 320px; // Reduced minimum width
+        }
+        
+        .action-buttons {
+            .btn {
+                padding: 5px 6px;
+                font-size: 10px;
+                min-height: 26px;
+                min-width: 50px;
+            }
+        }
+        
+        .pagination {
+            button {
+                padding: 4px 6px;
+                font-size: 0.75rem;
+                min-width: 30px;
+                min-height: 30px;
+            }
+        }
+    }
+
+    // Extra small devices - 320px and below
+    @media (max-width: 320px) {
+        padding: 5px;
+        
+        .data-table {
+            min-width: 300px;
+        }
+        
+        th, td {
+            padding: 4px 5px;
+            font-size: 0.7rem;
+        }
+        
+        .action-buttons {
+            gap: 0.2rem;
+            
+            .btn {
+                padding: 4px 5px;
+                font-size: 9px;
+                min-height: 24px;
+                min-width: 45px;
+            }
+        }
+    }
 }

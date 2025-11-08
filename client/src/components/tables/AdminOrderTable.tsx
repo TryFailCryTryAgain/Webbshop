@@ -58,6 +58,9 @@ export const AdminOrderTable = () => {
     const [selectedUserId, setSelectedUserId] = useState<string>("");
     const [productQuantities, setProductQuantities] = useState<ProductQuantity[]>([]);
     const [editDeliveryDate, setEditDeliveryDate] = useState<string>("");
+    const [searchQuery, setSearchQuery] = useState("");
+    const [searchResults, setSearchResults] = useState<Product[]>([]);
+    const [showSearchResults, setShowSearchResults] = useState(false);
 
     const extractProductId = (productItem: any): string => {
         if (typeof productItem === 'string') {
@@ -229,6 +232,36 @@ export const AdminOrderTable = () => {
         );
     };
 
+    // Search functionality for products
+    const handleSearch = (query: string) => {
+        setSearchQuery(query);
+        
+        if (query.trim().length === 0) {
+            setSearchResults([]);
+            setShowSearchResults(false);
+            return;
+        }
+
+        const filteredResults = allProducts.filter(product => 
+            product.title.toLowerCase().includes(query.toLowerCase()) ||
+            product.description.toLowerCase().includes(query.toLowerCase()) ||
+            (product.category && typeof product.category === 'object' && 
+             'title' in product.category && 
+             product.category.title.toLowerCase().includes(query.toLowerCase()))
+        );
+
+        setSearchResults(filteredResults);
+        setShowSearchResults(true);
+    };
+
+    // Add product from search results
+    const addProductFromSearch = (product: Product) => {
+        updateProductQuantity(product._id, 1);
+        setSearchQuery("");
+        setSearchResults([]);
+        setShowSearchResults(false);
+    };
+
     useEffect(() => {
         const fetchOrdersAndData = async () => {
             try {
@@ -259,6 +292,9 @@ export const AdminOrderTable = () => {
         setSelectedUserId(extractUserId(order.userId));
         setProductQuantities(countProductOccurrences(order));
         setEditDeliveryDate(new Date(order.delivery_date).toISOString().split('T')[0]);
+        setSearchQuery("");
+        setSearchResults([]);
+        setShowSearchResults(false);
     };
 
     const handleSaveOrder = async (e: React.FormEvent) => {
@@ -277,30 +313,25 @@ export const AdminOrderTable = () => {
                 return total + (product?.price || 0) * pq.quantity;
             }, 0);
 
-            const updatedOrder = {
-                ...editOrder,
+            const updatedOrderData = {
                 userId: selectedUserId,
-                productId: productIds,
-                price: totalPrice,
-                delivery_date: new Date(editDeliveryDate)
+                productId: productIds
+                // price and delivery_date are calculated on backend according to your API
             };
 
-            // await orderAPI.updateOrder(editOrder._id, updatedOrder);
+            await orderAPI.updateOrder(editOrder._id, updatedOrderData);
             
-            // Update local state
-            setOrders(prevOrders => 
-                prevOrders.map(order => 
-                    order._id === editOrder._id ? updatedOrder : order
-                )
-            );
+            // Update local state with the response from API
+            const updatedOrders = await orderAPI.getOrders();
+            setOrders(updatedOrders);
             
             setEditWindow(false);
             setEditOrder(null);
             
-            // Refresh product titles and user names if needed
+            // Refresh product titles and user names
             await Promise.all([
-                fetchProductTitles(orders),
-                fetchUserNames(orders)
+                fetchProductTitles(updatedOrders),
+                fetchUserNames(updatedOrders)
             ]);
             
         } catch (err) {
@@ -317,7 +348,7 @@ export const AdminOrderTable = () => {
 
         try {
             setLoading(true);
-            // await orderAPI.deleteOrder(orderId);
+            await orderAPI.deleteOrder(orderId);
             
             // Update local state
             setOrders(prevOrders => prevOrders.filter(order => order._id !== orderId));
@@ -351,10 +382,6 @@ export const AdminOrderTable = () => {
         });
     };
 
-    // const addProduct = (productId: string) => {
-    //     updateProductQuantity(productId, 1);
-    // };
-
     const getProductQuantity = (productId: string): number => {
         const pq = productQuantities.find(pq => pq.productId === productId);
         return pq ? pq.quantity : 0;
@@ -370,6 +397,22 @@ export const AdminOrderTable = () => {
     const getSelectedProductsCount = (): number => {
         return productQuantities.reduce((total, pq) => total + pq.quantity, 0);
     };
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            const searchContainer = document.getElementById("search_container");
+            
+            if (searchContainer && !searchContainer.contains(event.target as Node)) {
+                setShowSearchResults(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     return (
         <>
@@ -398,29 +441,94 @@ export const AdminOrderTable = () => {
                             </div>
                             
                             <div className="form-group">
-                                <label>Products</label>
+                                <label>Add Products</label>
+                                <div 
+                                    className="search-bar"
+                                    id="search_container"
+                                >
+                                    <input 
+                                        type="text" 
+                                        value={searchQuery}
+                                        onChange={(e) => handleSearch(e.target.value)}
+                                        onFocus={() => searchQuery.length > 0 && setShowSearchResults(true)}
+                                        placeholder="Search products to add..."
+                                    />
+                                    
+                                    {showSearchResults && (
+                                        <div className="search-results-dropdown">
+                                            {searchResults.length > 0 ? (
+                                                <>
+                                                    {searchResults.slice(0, 5).map((product) => (
+                                                        <div 
+                                                            key={product._id}
+                                                            className="search-result-item"
+                                                            onClick={() => addProductFromSearch(product)}
+                                                        >
+                                                            <div className="search-result-image">
+                                                                {product.images && product.images.length > 0 ? (
+                                                                    <img 
+                                                                        src={product.images[0]} 
+                                                                        alt={product.title}
+                                                                        onError={(e) => {
+                                                                            (e.target as HTMLImageElement).style.display = 'none';
+                                                                        }}
+                                                                    />
+                                                                ) : (
+                                                                    <div className="no-image-placeholder">No Image</div>
+                                                                )}
+                                                            </div>
+                                                            <div className="search-result-info">
+                                                                <div className="search-result-title">{product.title}</div>
+                                                                <div className="search-result-price">${product.price}</div>
+                                                                <div className="search-result-category">
+                                                                    {product.category && typeof product.category === 'object' && 'title' in product.category 
+                                                                        ? product.category.title 
+                                                                        : 'Uncategorized'}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                    {searchResults.length > 5 && (
+                                                        <div className="search-result-more">
+                                                            +{searchResults.length - 5} more results
+                                                        </div>
+                                                    )}
+                                                </>
+                                            ) : searchQuery.length > 0 ? (
+                                                <div className="search-no-results">
+                                                    No products found for "{searchQuery}"
+                                                </div>
+                                            ) : null}
+                                        </div>
+                                    )}
+                                </div>
+                                
+                                <label>Current Products</label>
                                 <div className="products-list">
-                                    {allProducts.map(product => {
-                                        const quantity = getProductQuantity(product._id);
+                                    {productQuantities.map(pq => {
+                                        const product = allProducts.find(p => p._id === pq.productId);
+                                        if (!product) return null;
+                                        
                                         return (
                                             <div key={product._id} className="product-item">
                                                 <div className="product-info">
                                                     <span className="product-title">{product.title}</span>
-                                                    <span className="product-price">${product.price}</span>
+                                                    <span className="product-price">${product.price} × {pq.quantity}</span>
+                                                    <span className="product-total">${(product.price * pq.quantity).toFixed(2)}</span>
                                                 </div>
                                                 <div className="quantity-controls">
                                                     <button
                                                         type="button"
-                                                        onClick={() => updateProductQuantity(product._id, quantity - 1)}
-                                                        disabled={quantity === 0}
+                                                        onClick={() => updateProductQuantity(product._id, pq.quantity - 1)}
+                                                        disabled={pq.quantity === 0}
                                                         className="quantity-btn"
                                                     >
                                                         -
                                                     </button>
-                                                    <span className="quantity-display">{quantity}</span>
+                                                    <span className="quantity-display">{pq.quantity}</span>
                                                     <button
                                                         type="button"
-                                                        onClick={() => updateProductQuantity(product._id, quantity + 1)}
+                                                        onClick={() => updateProductQuantity(product._id, pq.quantity + 1)}
                                                         className="quantity-btn"
                                                     >
                                                         +
@@ -429,7 +537,11 @@ export const AdminOrderTable = () => {
                                             </div>
                                         );
                                     })}
+                                    {productQuantities.length === 0 && (
+                                        <div className="no-products-message">No products added to this order</div>
+                                    )}
                                 </div>
+                                
                                 <div className="selected-products-summary">
                                     <strong>Total Items: {getSelectedProductsCount()}</strong>
                                     <br />
@@ -490,8 +602,9 @@ export const AdminOrderTable = () => {
                                 <td>${order.price.toFixed(2)}</td>
                                 <td>{new Date(order.created_at).toLocaleDateString()}</td>
                                 <td>{new Date(order.delivery_date).toLocaleDateString()}</td>
-                                <td>
+                                <td className="action-buttons">
                                     <button
+                                        className="btn btn-info"
                                         onClick={() => EditOrder(order)}
                                         disabled={loading}
                                     >
@@ -500,7 +613,7 @@ export const AdminOrderTable = () => {
                                     <button
                                         onClick={() => handleDeleteOrder(order._id)}
                                         disabled={loading}
-                                        className="delete-btn"
+                                        className="btn btn-danger"
                                     >
                                         Delete
                                     </button>

@@ -506,14 +506,14 @@ const AdminProductsTab = () => {
                                     {editingProductId === product._id ? (
                                         <>
                                             <button 
-                                                className="btn-edit"
+                                                className="btn btn-success"
                                                 onClick={() => handleSaveEdit(product._id)}
                                                 disabled={actionLoading === product._id}
                                             >
                                                 {actionLoading === product._id ? "Saving..." : "Save"}
                                             </button>
                                             <button 
-                                                className="btn-cancel"
+                                                className="btn btn-danger"
                                                 onClick={handleCancelEdit}
                                                 disabled={actionLoading === product._id}
                                             >
@@ -523,14 +523,14 @@ const AdminProductsTab = () => {
                                     ) : (
                                         <>
                                             <button 
-                                                className="btn-edit"
+                                                className="btn btn-info"
                                                 onClick={() => handleEditClick(product)}
                                                 disabled={actionLoading !== null}
                                             >
                                                 Edit
                                             </button>
                                             <button 
-                                                className="btn-delete"
+                                                className="btn btn-danger"
                                                 onClick={() => handleDeleteProduct(product._id)}
                                                 disabled={actionLoading !== null}
                                             >

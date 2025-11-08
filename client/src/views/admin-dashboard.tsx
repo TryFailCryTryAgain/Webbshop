@@ -1,11 +1,11 @@
 import AdminDashboardTabs from "../components/adminDashboardTabs";
 import { Header } from "../components/header";
 import { useState } from "react";
-import AdminOverviewTab from "../components/tabs/AdminOverviewTab";
 import AdminOrdersTab from "../components/tabs/AdminOrdersTab";
 import AdminUsersTab from "../components/tabs/AdminUsersTab";
 import AdminProductsTab from "../components/tabs/AdminProductsTab";
 import AdminReviewsTab from "../components/tabs/AdminReviewsTab";
+import AdminOverviewTab from "../components/tabs/AdminOverviewTab";
 
 
 const AdminDashboard = () => {

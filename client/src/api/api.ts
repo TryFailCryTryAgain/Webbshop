@@ -140,6 +140,20 @@ export const orderAPI = {
             }
         });
         return response.data;
+    },
+
+    updateOrder: async (id: string, orderData: Omit<Order, '_id' | 'created_at' | 'updated_at' | 'price' | 'delivery_date'>): Promise<Order> => {
+        const response = await axios.put(`${API_BASE_URL}/order/${id}`, orderData, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        return response.data;
+    },
+
+    deleteOrder: async (id: string): Promise<{ message: string, order: Order}> => {
+        const response = await axios.delete(`${API_BASE_URL}/order/${id}`);
+        return response.data;
     }
 }
 

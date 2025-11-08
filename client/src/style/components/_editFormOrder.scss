@@ -1,5 +1,8 @@
 @import '../variables';
 
+// This styling is being used for the Orders edit Form
+// Needed better structure when it came to the modular structure
+
 .edit-form-overlay {
     position: fixed;
     background-color: $bg-dark;
@@ -12,6 +15,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    z-index: 1000;
 
     .edit-form {
         display: flex;

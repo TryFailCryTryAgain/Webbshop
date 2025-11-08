@@ -86,10 +86,6 @@ const AdminOverviewTab = () => {
                 </div>
             </div>
 
-            {/* <div className="user-registration-graph">
-                <UserByRegistrationLineChart users={users} />
-            </div> */}
-
             <div className="order-by-status">
                 <OrderByStatusDonutChart 
                     orders={orders}
@@ -100,9 +96,6 @@ const AdminOverviewTab = () => {
                 reviews={reviews}
                 products={products}
             />
-
-            {/* Not currently relevant needs to be removed! */}
-            {/* <BtmProductsRating /> */}
         </>
     );
 };

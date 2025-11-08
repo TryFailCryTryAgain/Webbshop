@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { RouterContainer } from '../routes/RouterContainer';
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { categoryAPI, type Category, orderAPI } from "../api/api";
+import { categoryAPI, type Category, orderAPI, productAPI, type Product } from "../api/api";
 import { 
     getCartItemsFromStorage, 
     removeProductFromStorage, 
@@ -28,16 +28,75 @@ export const Header = () => {
     const [_error, setError] = useState<string | null>(null);
     const [cartBar, setCartBar] = useState(false);
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
+    const [mobileMenuVisible, setMobileMenuVisible] = useState(false);
+    const [mobileCategoriesVisible, setMobileCategoriesVisible] = useState(false);
     const navigate = useNavigate();
     
     const token = localStorage.getItem("token");
     const user = localStorage.getItem("user");
     const userData = user ? JSON.parse(user) as Profile : null;
 
+    const [searchQuery, setSearchQuery] = useState("");
+    const [searchResults, setSearchResults] = useState<Product[]>([]);
+    const [showSearchResults, setShowSearchResults] = useState(false);
+    const [products, setAllProducts] = useState<Product[]>([]);
+
+    useEffect(() => {
+        const fetchAllProducts = async () => {
+            try {
+                const allProducts = await productAPI.getProducts();
+                setAllProducts(allProducts);
+            } catch (err) {
+                console.error('Error fetching products', err);
+            }
+        };
+
+        fetchAllProducts();
+    }, []);
+
+    const handleSearch = (query: string) => {
+        setSearchQuery(query);
+        
+        if (query.trim().length === 0) {
+            setSearchResults([]);
+            setShowSearchResults(false);
+            return;
+        }
+
+        const filteredResults = products.filter(product => 
+            product.title.toLowerCase().includes(query.toLowerCase()) ||
+            product.description.toLowerCase().includes(query.toLowerCase()) ||
+            (product.category && typeof product.category === 'object' && 
+             'title' in product.category && 
+             product.category.title.toLowerCase().includes(query.toLowerCase()))
+        );
+
+        setSearchResults(filteredResults);
+        setShowSearchResults(true);
+    };
+
+    const navigateToProductPage = (product: Product) => {
+        const productId = product._id;
+        const shortenId = productId.slice(0, 6);
+
+        navigate(RouterContainer.Product.replace(':id', shortenId), {
+            state: {
+                product: product,
+                productId: product._id
+            }
+        });
+        
+        setSearchQuery("");
+        setSearchResults([]);
+        setShowSearchResults(false);
+    };
+
+
     const handleLogout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
         delete axios.defaults.headers.common['Authorization'];
+        setMobileMenuVisible(false);
         navigate(RouterContainer.Login);
         window.location.reload();
     };
@@ -69,6 +128,19 @@ export const Header = () => {
         setDropdownVisible(!dropdownVisible);
     }
 
+    async function fetchMobileCategories() {
+        if (!mobileCategoriesVisible && categories.length === 0) {
+            try {
+                const data = await categoryAPI.getCategories();
+                setCategories(data);
+            } catch (err) {
+                setError('Failed to load categories');
+                console.error('Error fetching categories', err);
+            }
+        }
+        setMobileCategoriesVisible(!mobileCategoriesVisible);
+    }
+
     function navigateToCategoryPage(id: string) {
         const categoryId = id;
         const ShortenCategoryId = id.slice(0, 6);
@@ -80,14 +152,38 @@ export const Header = () => {
         });
         
         setDropdownVisible(false);
+        setMobileCategoriesVisible(false);
+        setMobileMenuVisible(false);
     }
+
+    const handleSearchKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter' && searchQuery.trim().length > 0) {
+            if (searchResults.length > 0) {
+                navigateToProductPage(searchResults[0]);
+            } else {
+                setShowSearchResults(false);
+            }
+        }
+    };
 
     // Close dropdown when clicking outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             const dropdownContainer = document.getElementById("category_dropdown_menu_container");
+            const mobileMenuContainer = document.getElementById("mobile_menu_container");
+            const searchContainer = document.getElementById("search_container");
+            
             if (dropdownContainer && !dropdownContainer.contains(event.target as Node)) {
                 setDropdownVisible(false);
+            }
+            
+            if (mobileMenuContainer && !mobileMenuContainer.contains(event.target as Node)) {
+                setMobileMenuVisible(false);
+                setMobileCategoriesVisible(false);
+            }
+
+            if (searchContainer && !searchContainer.contains(event.target as Node)) {
+                setShowSearchResults(false);
             }
         };
 
@@ -168,6 +264,11 @@ export const Header = () => {
         setCartBar(false);
     };
 
+    const handleMobileLinkClick = () => {
+        setMobileMenuVisible(false);
+        setMobileCategoriesVisible(false);
+    };
+
     return (
         <>
             {cartBar && (
@@ -245,14 +346,76 @@ export const Header = () => {
                     )}
                 </aside>
             )}
+
             
             <nav className="user-header">
                 <div className="logo">Webbshop</div>
-                <div className="search-bar">
-                    <input type="text" placeholder="Search..."/>
+
+
+                <div 
+                    className="search-bar"
+                    id="search_container"
+                >
+                    <input 
+                        type="text" 
+                        value={searchQuery}
+                        onChange={(e) => handleSearch(e.target.value)}
+                        onKeyPress={handleSearchKeyPress}
+                        onFocus={() => searchQuery.length > 0 && setShowSearchResults(true)}
+                    />
+                    
+                    {showSearchResults && (
+                        <div className="search-results-dropdown">
+                            {searchResults.length > 0 ? (
+                                <>
+                                    {searchResults.slice(0, 5).map((product) => (
+                                        <div 
+                                            key={product._id}
+                                            className="search-result-item"
+                                            onClick={() => navigateToProductPage(product)}
+                                        >
+                                            <div className="search-result-image">
+                                                {product.images && product.images.length > 0 ? (
+                                                    <img 
+                                                        src={product.images[0]} 
+                                                        alt={product.title}
+                                                        onError={(e) => {
+                                                            (e.target as HTMLImageElement).style.display = 'none';
+                                                        }}
+                                                    />
+                                                ) : (
+                                                    <div className="no-image-placeholder">No Image</div>
+                                                )}
+                                            </div>
+                                            <div className="search-result-info">
+                                                <div className="search-result-title">{product.title}</div>
+                                                <div className="search-result-price">${product.price}</div>
+                                                <div className="search-result-category">
+                                                    {product.category && typeof product.category === 'object' && 'title' in product.category 
+                                                        ? product.category.title 
+                                                        : 'Uncategorized'}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                    {searchResults.length > 5 && (
+                                        <div className="search-result-more">
+                                            +{searchResults.length - 5} more results
+                                        </div>
+                                    )}
+                                </>
+                            ) : searchQuery.length > 0 ? (
+                                <div className="search-no-results">
+                                    No products found for "{searchQuery}"
+                                </div>
+                            ) : null}
+                        </div>
+                    )}
                 </div>
+
+
                 <ul className="nav-links">
-                    <li><Link to="/">Products</Link></li>
+                    <li><Link to="/">Products</Link></li> 
                     <li 
                         id="category_dropdown_menu_container" 
                         className="category_dropdown_menu_container"
@@ -326,6 +489,121 @@ export const Header = () => {
                         </Link>
                     </div>
                 )}
+                
+                {/* Fixed Hamburgure Menu */}
+                <div 
+                    className="hamburgure_toggle"
+                    id="mobile_menu_container"
+                >
+                    <i 
+                        className="fa-solid fa-bars"
+                        onClick={() => setMobileMenuVisible(!mobileMenuVisible)}
+                        style={{ cursor: 'pointer' }}
+                    ></i>
+
+                    {mobileMenuVisible && (
+                        <ul className="dropdown-menu">
+                            <li>
+                                <Link 
+                                    to="/" 
+                                    onClick={handleMobileLinkClick}
+                                >
+                                    Products
+                                </Link>
+                            </li>
+                            
+                            <li className="mobile-category-item">
+                                <a 
+                                    href="#"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        fetchMobileCategories();
+                                    }}
+                                >
+                                    Categories
+                                    <i className={`fa-solid ${mobileCategoriesVisible ? 'fa-chevron-up' : 'fa-chevron-down'}`}></i>
+                                </a>
+                                {mobileCategoriesVisible && (
+                                    <ul className="mobile-categories-dropdown">
+                                        {categories.map((category) => (
+                                            <li 
+                                                key={category._id}
+                                                onClick={() => navigateToCategoryPage(category._id)}
+                                            >
+                                                {category.title}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </li>
+
+                            {token && userData ? (
+                                <>
+                                    <li>
+                                        <Link 
+                                            to={RouterContainer.UserDashboard} 
+                                            onClick={handleMobileLinkClick}
+                                        >
+                                            Profile
+                                        </Link>
+                                    </li>
+                                    {userData.role === "admin" && (
+                                        <li>
+                                            <Link 
+                                                to={RouterContainer.AdminDashboard} 
+                                                onClick={handleMobileLinkClick}
+                                            >
+                                                Dashboard
+                                            </Link>
+                                        </li>
+                                    )}
+                                    <li>
+                                        <div 
+                                            className="mobile-cart-item"
+                                            onClick={() => {
+                                                setCartBar(true);
+                                                setMobileMenuVisible(false);
+                                            }}
+                                        >
+                                            Cart ({calculateTotalItems()})
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <button 
+                                            className="mobile-logout-btn"
+                                            onClick={handleLogout}
+                                        >
+                                            Logout
+                                        </button>
+                                    </li>
+                                    <li className="mobile-user-info">
+                                        Welcome, {userData.first_name} {userData.last_name}
+                                    </li>
+                                </>
+                            ) : (
+                                <>
+                                    <li>
+                                        <Link 
+                                            to={RouterContainer.Login} 
+                                            onClick={handleMobileLinkClick}
+                                        >
+                                            Sign in
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link 
+                                            to={RouterContainer.Register} 
+                                            onClick={handleMobileLinkClick}
+                                        >
+                                            Sign up
+                                        </Link>
+                                    </li>
+                                </>
+                            )}
+                        </ul>
+                    )}
+                </div>
+                
             </nav>
         </>
     );
