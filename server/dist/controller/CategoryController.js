@@ -200,7 +200,6 @@ const deleteCategory = async (req, res) => {
         });
     }
 };
-// Export all functions
 exports.default = {
     getCategories,
     getCategoryById,

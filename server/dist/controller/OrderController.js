@@ -63,26 +63,25 @@ const createOrder = async (req, res) => {
         uniqueProducts.forEach(product => {
             productPriceMap.set(product._id.toString(), product.price);
         });
-        // Calculate total price considering quantities (duplicates)
+        // Calculate total price considering duplicates
         const totalPrice = productId.reduce((sum, id) => {
             const price = productPriceMap.get(id);
             return sum + (price || 0);
         }, 0);
-        // Calculate delivery date (7 days from now)
+        // Adds 7 days to the delivery date
         const delivery_date = new Date();
         delivery_date.setDate(delivery_date.getDate() + 7);
         const created_at = new Date();
         const updated_at = new Date();
         const newOrder = new OrderModel_1.Order({
             userId,
-            productId, // This keeps the duplicates to maintain quantities
+            productId,
             price: totalPrice,
             delivery_date,
             created_at,
             updated_at
         });
         await newOrder.save();
-        // Populate the response with product and user details
         const populatedOrder = await OrderModel_1.Order.findById(newOrder._id)
             .populate('userId', 'first_name last_name email')
             .populate('productId', 'title price');
@@ -217,7 +216,6 @@ const getUserOrders = async (req, res) => {
         });
     }
 };
-// Export all functions
 exports.default = {
     getOrders,
     getOrderById,
