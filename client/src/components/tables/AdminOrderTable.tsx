@@ -307,11 +307,11 @@ export const AdminOrderTable = () => {
             // Convert quantities back to productId array
             const productIds = productQuantitiesToProductIds(productQuantities);
             
-            // Calculate total price based on product quantities
-            const totalPrice = productQuantities.reduce((total, pq) => {
-                const product = allProducts.find(p => p._id === pq.productId);
-                return total + (product?.price || 0) * pq.quantity;
-            }, 0);
+            // // Calculate total price based on product quantities
+            // const totalPrice = productQuantities.reduce((total, pq) => {
+            //     const product = allProducts.find(p => p._id === pq.productId);
+            //     return total + (product?.price || 0) * pq.quantity;
+            // }, 0);
 
             const updatedOrderData = {
                 userId: selectedUserId,
@@ -382,10 +382,10 @@ export const AdminOrderTable = () => {
         });
     };
 
-    const getProductQuantity = (productId: string): number => {
-        const pq = productQuantities.find(pq => pq.productId === productId);
-        return pq ? pq.quantity : 0;
-    };
+    // const getProductQuantity = (productId: string): number => {
+    //     const pq = productQuantities.find(pq => pq.productId === productId);
+    //     return pq ? pq.quantity : 0;
+    // };
 
     const calculateTotalPrice = (): number => {
         return productQuantities.reduce((total, pq) => {
