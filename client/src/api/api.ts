@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'; // Update with a .env location so it can be used with the deployed url later
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://webbshop-deyq.onrender.com'; // Update with a .env location so it can be used with the deployed url later
 
 export interface Category {
     _id: string;
