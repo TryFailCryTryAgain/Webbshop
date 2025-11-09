@@ -226,7 +226,6 @@ const deleteCategory = async (req: Request, res: Response): Promise<void> => {
     }
 }
 
-// Export all functions
 export default {
     getCategories,
     getCategoryById,
